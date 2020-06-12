@@ -21,5 +21,5 @@ if (module.hot) {
 
   console.info("✅ Client-side HMR Enabled!");
 } else {
-  console.info("❌ Client-side HMR Not Supported.");
+  console.info("❌ Client-side HMR Not Supported.");
 }
