@@ -9,11 +9,13 @@ const webpackBase = require("./webpack.config.base");
 const { assetsDir, rootPath } = require("../conf");
 const webpackDev = require("../webpack.dev");
 
+// https://docs.nestjs.com/recipes/hot-reload
+
 module.exports = Merge(webpackBase, webpackDev, {
   entry: {
     server: [
       "webpack/hot/poll?1000",
-      path.join(rootPath, "./src/server/index.ts"),
+      path.join(rootPath, "./src/server/index.tsx"),
     ],
   },
   output: {

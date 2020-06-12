@@ -15,7 +15,9 @@ loadableReady(() => {
 });
 
 if (module.hot) {
-  module.hot.accept();
+  module.hot.accept("./App", () => {
+    console.log("🔁 Client-side HMR Reloading...");
+  });
 
   console.info("✅ Client-side HMR Enabled!");
 } else {

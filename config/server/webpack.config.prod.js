@@ -10,7 +10,7 @@ const webpackProd = require("../webpack.prod");
 
 module.exports = Merge(webpackBase, webpackProd, {
   entry: {
-    server: path.join(rootPath, "./src/server/index.ts"),
+    server: path.join(rootPath, "./src/server/index.tsx"),
   },
   output: {
     chunkFilename: path.join(
