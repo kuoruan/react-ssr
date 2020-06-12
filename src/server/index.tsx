@@ -3,6 +3,7 @@ import path from "path";
 import App from "@/App";
 import { ChunkExtractor, ChunkExtractorManager } from "@loadable/server";
 import Express from "express";
+import PortFinder from "portfinder";
 import React from "react";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
 import Helmet from "react-helmet";
@@ -97,21 +98,44 @@ app.get("*", function (
   }
 });
 
-const port = process.env.PORT || 1000;
+const runPort = Number.isInteger(process.env.PORT)
+  ? Number(process.env.PORT)
+  : 8000;
 
-const server = app.listen(port, () => {
-  console.log(`App listening on port ${port}...`);
-  console.log(`Build time: ${process.env.PACKAGE_BUILD_TIME}...`);
-});
+PortFinder.getPort(
+  {
+    port: runPort,
+  },
+  (err, port) => {
+    if (err) {
+      console.error(err.message);
+    } else {
+      const server = app.listen(port, () => {
+        const addr = server.address();
 
-if (module.hot) {
-  module.hot.accept(["@/App", "./Html"], () => {
-    console.log("🔁 Server-side HMR Reloading...");
-  });
+        if (addr) {
+          let listen: string;
 
-  module.hot.dispose(() => server.close());
+          if (typeof addr === "string") {
+            listen = addr;
+          } else {
+            listen = `${addr.address}${addr.port}`;
+          }
+          console.log(`App listening on ${listen}...`);
+        }
 
-  console.info("✅ Server-side HMR Enabled!");
-} else {
-  console.info("❌ Server-side HMR Not Supported.");
-}
+        console.log(`Build time: ${process.env.PACKAGE_BUILD_TIME}`);
+      });
+
+      if (module.hot) {
+        module.hot.accept(["@/App", "./Html"], () => {
+          console.log("🔁 Server-side HMR Reloading...");
+        });
+
+        console.info("✅ Server-side HMR Enabled!");
+      } else {
+        console.info("❌ Server-side HMR Not Supported.");
+      }
+    }
+  }
+);
