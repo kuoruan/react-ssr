@@ -9,7 +9,7 @@ const webpackDev = require("../webpack.dev");
 
 module.exports = Merge(webpackBase, webpackDev, {
   entry: [
-    "webpack-hot-middleware/client?name=client",
+    "webpack-hot-middleware/client",
     path.join(rootPath, "./src/index.tsx"),
   ],
   output: {

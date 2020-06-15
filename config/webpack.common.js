@@ -1,12 +1,9 @@
 const path = require("path");
 
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const Webpack = require("webpack");
 
 const { assetsDir, rootPath } = require("./conf");
-const { raw, stringified } = require("./env");
-
-const isEnvProduction = raw.NODE_ENV === "production";
+const { stringified } = require("./env");
 
 module.exports = {
   resolve: {
@@ -24,8 +21,6 @@ module.exports = {
           loader: "babel-loader",
           options: {
             cacheDirectory: true,
-            cacheCompression: isEnvProduction,
-            compact: isEnvProduction,
           },
         },
         exclude: [/node_modules/],
@@ -49,29 +44,6 @@ module.exports = {
             },
           },
         ],
-      },
-      {
-        test: /\.css$/,
-        use: [
-          isEnvProduction ? MiniCssExtractPlugin.loader : "style-loader",
-          "css-loader",
-          "postcss-loader",
-        ],
-      },
-      {
-        test: /\.(scss|sass)$/,
-        use: [
-          isEnvProduction ? MiniCssExtractPlugin.loader : "style-loader",
-          "css-loader",
-          "postcss-loader",
-          {
-            loader: "sass-loader",
-            options: {
-              prependData: `@import "@/assets/scss/variables.scss";`,
-            },
-          },
-        ],
-        exclude: [/node_modules/],
       },
       {
         test: /\.svg$/,

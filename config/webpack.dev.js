@@ -1,4 +1,5 @@
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
+const StylelintPlugin = require("stylelint-webpack-plugin");
 const Webpack = require("webpack");
 
 module.exports = {
@@ -15,6 +16,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new StylelintPlugin(),
     new Webpack.HotModuleReplacementPlugin(),
     new Webpack.NoEmitOnErrorsPlugin(),
     new FriendlyErrorsWebpackPlugin(),

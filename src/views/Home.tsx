@@ -1,5 +1,6 @@
 import React, { FC, HTMLProps, useState } from "react";
 import { Helmet } from "react-helmet";
+import "./Home.scss";
 
 interface HomeProps extends HTMLProps<HTMLDivElement> {}
 
@@ -11,8 +12,8 @@ const Home: FC<HomeProps> = function (props: HomeProps) {
       <Helmet>
         <title>Home page.</title>
       </Helmet>
-      <div>
-        <p>Hello World.</p>
+      <div className="main">
+        <p className="hello">Hello World.</p>
         <input
           type="text"
           value={inp}

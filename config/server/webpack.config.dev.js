@@ -15,7 +15,7 @@ module.exports = Merge(webpackBase, webpackDev, {
   entry: {
     server: [
       "webpack/hot/poll?1000",
-      path.join(rootPath, "./src/server/index.tsx"),
+      path.join(rootPath, "./src/server/index.ts"),
     ],
   },
   output: {
