@@ -15,9 +15,9 @@ const Status: FC<StatusProps> = function ({
       render={({ staticContext }) => {
         if (staticContext) {
           staticContext.statusCode = statusCode;
-
-          return children;
         }
+
+        return children;
       }}
     />
   );
