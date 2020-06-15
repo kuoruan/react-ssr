@@ -4,13 +4,13 @@ import Express from "express";
 import React from "react";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
 import Helmet from "react-helmet";
-import { StaticRouter } from "react-router-dom";
+import { StaticRouter, StaticContext } from "react-router";
 
 import Html from "./Html";
 
-type Context = {
+interface Context extends StaticContext {
   url?: string;
-};
+}
 
 export default function (clientStatsFile: string): Express.RequestHandler {
   if (module.hot) {
@@ -40,8 +40,8 @@ export default function (clientStatsFile: string): Express.RequestHandler {
       </ChunkExtractorManager>
     );
 
-    if (context.url) {
-      return res.redirect(301, context.url);
+    if (context.statusCode && context.url) {
+      return res.redirect(context.statusCode, context.url);
     } else {
       const linkElements = clientExtractor.getLinkElements();
       const styleElements = clientExtractor.getStyleElements();
@@ -67,6 +67,11 @@ export default function (clientStatsFile: string): Express.RequestHandler {
         />
       );
 
+      if (context.statusCode) {
+        res.status(context.statusCode);
+      } else {
+        res.status(200);
+      }
       res.set("Content-Type", "text/html");
       res.send(`<!DOCTYPE html>${html}`);
 

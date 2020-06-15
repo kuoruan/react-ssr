@@ -1,3 +1,4 @@
+import "@/assets/scss/tailwind.scss";
 import loadable from "@loadable/component";
 import React, { FC, HTMLProps } from "react";
 import { Helmet } from "react-helmet";

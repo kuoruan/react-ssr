@@ -1,0 +1,21 @@
+@tailwind base;
+
+html {
+  box-sizing: border-box;
+  font-size: 100%;
+  line-height: 1.15;
+}
+body {
+  @apply bg-white font-sans antialiased;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+svg {
+  fill: currentColor;
+}
+
+@tailwind components;
+@tailwind utilities;
