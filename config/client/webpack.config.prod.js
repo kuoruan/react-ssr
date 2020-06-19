@@ -2,10 +2,9 @@ const path = require("path");
 
 const Merge = require("webpack-merge");
 
-const webpackBase = require("./webpack.config.base");
-
 const { assetsDir, rootPath } = require("../conf");
 const webpackProd = require("../webpack.prod");
+const webpackBase = require("./webpack.config.base");
 
 module.exports = Merge(webpackBase, webpackProd, {
   entry: path.join(rootPath, "./src/index.tsx"),

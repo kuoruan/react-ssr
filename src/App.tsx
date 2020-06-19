@@ -1,18 +1,10 @@
 import "@/assets/scss/tailwind.scss";
-import loadable from "@loadable/component";
 import React, { FC, HTMLProps } from "react";
 import { Helmet } from "react-helmet";
 import { Switch, Route } from "react-router-dom";
 
-const About = loadable(() =>
-  import(/* webpackChunkName: "views" */ "@/views/About")
-);
-const Home = loadable(() =>
-  import(/* webpackChunkName: "views" */ "@/views/Home")
-);
-const NotFound = loadable(() =>
-  import(/* webpackChunkName: "common" */ "@/views/NotFound")
-);
+import PrivateRoute from "@/components/PrivateRoute";
+import routes from "@/routes";
 
 interface AppProps extends HTMLProps<HTMLDivElement> {}
 
@@ -23,9 +15,21 @@ const App: FC<AppProps> = function (props: AppProps) {
         <title>React.js Server Side Render.</title>
       </Helmet>
       <Switch>
-        <Route path="/" component={Home} exact={true} />
-        <Route path="/about" component={About} />
-        <Route path="*" component={NotFound} />
+        {routes.map(
+          ({ requiresAuth, redirectPath = "/login", ...restProps }, index) => {
+            if (requiresAuth) {
+              return (
+                <PrivateRoute
+                  key={index}
+                  redirectPath={redirectPath}
+                  {...restProps}
+                />
+              );
+            } else {
+              return <Route key={index} {...restProps} />;
+            }
+          }
+        )}
       </Switch>
     </>
   );

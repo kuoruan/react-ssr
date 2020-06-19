@@ -7,6 +7,7 @@ const baseConfig = {
   serverDir: "server",
   assetsDir: "static",
   publicPath: "/",
+  scssPrependData: "",
   statsFilename: "loadable-stats.json",
 };
 

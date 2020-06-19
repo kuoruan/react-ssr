@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 
-const Dateformat = require("dateformat");
 const DotEnv = require("dotenv");
 
 const { rootPath } = require("./conf");
@@ -31,10 +30,8 @@ for (const file of dotEnvFiles) {
   }
 }
 
-const APP_ENV = /^APP_/i;
-
 const raw = Object.keys(process.env)
-  .filter((key) => APP_ENV.test(key))
+  .filter((key) => /^APP_/i.test(key))
   .reduce(
     (env, key) => {
       env[key] = process.env[key];
@@ -42,7 +39,7 @@ const raw = Object.keys(process.env)
     },
     {
       NODE_ENV: process.env.NODE_ENV,
-      PACKAGE_BUILD_TIME: Dateformat(new Date()),
+      PACKAGE_BUILD_TIME: new Date().toLocaleString(),
     }
   );
 

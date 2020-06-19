@@ -4,10 +4,9 @@ const StartServerPlugin = require("start-server-webpack-plugin");
 const Merge = require("webpack-merge");
 const NodeExternals = require("webpack-node-externals");
 
-const webpackBase = require("./webpack.config.base");
-
 const { assetsDir, rootPath } = require("../conf");
 const webpackDev = require("../webpack.dev");
+const webpackBase = require("./webpack.config.base");
 
 // https://docs.nestjs.com/recipes/hot-reload
 
@@ -20,7 +19,16 @@ module.exports = Merge(webpackBase, webpackDev, {
   },
   output: {
     chunkFilename: path.join(assetsDir, "js", "[name].chunk.js"),
-    devtoolModuleFilenameTemplate: "[absolute-resource-path]",
+  },
+  // ignore css files in dev, insert styles with client style-loader
+  module: {
+    rules: [
+      {
+        test: /\.s?(a|c)ss$/,
+        exclude: [/node_modules/],
+        loader: "null-loader",
+      },
+    ],
   },
   externals: [
     NodeExternals({

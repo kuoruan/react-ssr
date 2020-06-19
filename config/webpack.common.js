@@ -46,6 +46,14 @@ module.exports = {
         ],
       },
       {
+        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)$/,
+        loader: "url-loader",
+        options: {
+          limit: 10000,
+          name: utils.assetsPath("media/[name].[hash:8].[ext]"),
+        },
+      },
+      {
         test: /\.svg$/,
         exclude: /node_modules/,
         use: [
@@ -62,13 +70,12 @@ module.exports = {
         ],
       },
       {
-        test: /\.woff(2)?$/,
+        test: /\.(woff2?|eot|ttf|otf)$/,
         use: [
           {
             loader: "file-loader",
             options: {
               name: path.join(assetsDir, "fonts", "[hash:8].[ext]"),
-              mimetype: "application/font-woff",
             },
           },
         ],
@@ -79,10 +86,11 @@ module.exports = {
   stats: {
     cached: false,
     cachedAssets: false,
-    chunks: false,
-    chunkModules: false,
     children: false,
+    chunkModules: false,
+    chunks: false,
     colors: true,
+    entrypoints: false,
     hash: false,
     modules: false,
     reasons: false,

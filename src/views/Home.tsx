@@ -1,5 +1,6 @@
 import React, { FC, HTMLProps, useState } from "react";
 import { Helmet } from "react-helmet";
+
 import "./Home.scss";
 
 interface HomeProps extends HTMLProps<HTMLDivElement> {}

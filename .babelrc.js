@@ -2,8 +2,13 @@ function isWebTarget(caller) {
   return Boolean(caller && caller.target === "web");
 }
 
+function isNodeTarget(caller) {
+  return Boolean(caller && caller.target === "node");
+}
+
 module.exports = (api) => {
   const web = api.caller(isWebTarget);
+  const node = api.caller(isNodeTarget);
 
   return {
     presets: [
@@ -13,6 +18,7 @@ module.exports = (api) => {
           modules: false,
           useBuiltIns: web ? "usage" : undefined,
           corejs: web ? 3 : false,
+          targets: node ? { node: "current" } : undefined,
         },
       ],
       "@babel/preset-typescript",

@@ -2,7 +2,6 @@ module.exports = {
   root: true,
   env: {
     browser: true,
-    es6: true,
     node: true,
   },
   parser: "@typescript-eslint/parser",
@@ -11,6 +10,9 @@ module.exports = {
     "plugin:prettier/recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
   ],
   parserOptions: {
     ecmaVersion: 2020,
@@ -26,10 +28,9 @@ module.exports = {
         groups: [
           "builtin",
           "external",
-          "sibling",
-          "parent",
-          "index",
           "internal",
+          ["parent", "sibling"],
+          "index",
           "unknown",
         ],
         alphabetize: { order: "asc", caseInsensitive: true },
@@ -41,5 +42,11 @@ module.exports = {
     react: {
       version: "detect",
     },
+    "import/resolver": [
+      "node",
+      {
+        typescript: {},
+      },
+    ],
   },
 };

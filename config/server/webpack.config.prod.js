@@ -1,12 +1,12 @@
 const path = require("path");
 
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const Merge = require("webpack-merge");
 const NodeExternals = require("webpack-node-externals");
 
-const webpackBase = require("./webpack.config.base");
-
-const { assetsDir, rootPath } = require("../conf");
+const { assetsDir, rootPath, scssPrependData } = require("../conf");
 const webpackProd = require("../webpack.prod");
+const webpackBase = require("./webpack.config.base");
 
 module.exports = Merge(webpackBase, webpackProd, {
   entry: {
@@ -18,6 +18,29 @@ module.exports = Merge(webpackBase, webpackProd, {
       "js",
       "[name].[contenthash:8].chunk.js"
     ),
+  },
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
+      },
+      {
+        test: /\.s(c|a)ss$/,
+        exclude: [/node_modules/],
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "postcss-loader",
+          {
+            loader: "sass-loader",
+            options: {
+              prependData: scssPrependData,
+            },
+          },
+        ],
+      },
+    ],
   },
   externals: [NodeExternals()],
 });

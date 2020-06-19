@@ -9,10 +9,11 @@ const Merge = require("webpack-merge");
 
 const {
   clientDir,
-  statsFilename,
   distDir,
   publicPath,
   rootPath,
+  scssPrependData,
+  statsFilename,
 } = require("../conf");
 const { raw } = require("../env");
 const webpackCommon = require("../webpack.common");
@@ -30,7 +31,6 @@ module.exports = Merge(webpackCommon, {
     rules: [
       {
         test: /\.css$/,
-        exclude: [/node_modules/],
         use: [
           isProduction ? MiniCssExtractPlugin.loader : "style-loader",
           "css-loader",
@@ -38,7 +38,7 @@ module.exports = Merge(webpackCommon, {
         ],
       },
       {
-        test: /\.(scss|sass)$/,
+        test: /\.s(c|a)ss$/,
         exclude: [/node_modules/],
         use: [
           isProduction ? MiniCssExtractPlugin.loader : "style-loader",
@@ -47,7 +47,7 @@ module.exports = Merge(webpackCommon, {
           {
             loader: "sass-loader",
             options: {
-              prependData: `@import "@/assets/scss/variables.scss";`,
+              prependData: scssPrependData,
             },
           },
         ],
@@ -65,4 +65,13 @@ module.exports = Merge(webpackCommon, {
     }),
     new CleanWebpackPlugin(),
   ],
+  node: {
+    // prevent webpack from injecting mocks to Node native modules
+    // that does not make sense for the client
+    dgram: "empty",
+    fs: "empty",
+    net: "empty",
+    tls: "empty",
+    child_process: "empty",
+  },
 });

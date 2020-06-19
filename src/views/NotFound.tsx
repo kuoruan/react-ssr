@@ -1,5 +1,6 @@
-import Status from "@/components/Status";
 import React, { FC } from "react";
+
+import Status from "@/components/Status";
 
 interface NotFoundProps {}
 

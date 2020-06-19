@@ -9,6 +9,7 @@ interface HtmlProps extends HTMLProps<HTMLHtmlElement> {
   styleNodes: ReactNode[];
   scriptNodes: ReactNode[];
   content: string;
+  preloadedState: any;
 }
 
 const Html: FC<HtmlProps> = function ({
@@ -21,6 +22,7 @@ const Html: FC<HtmlProps> = function ({
   scriptNodes,
   children,
   content,
+  preloadedState,
   ...restProps
 }: HtmlProps) {
   return (
@@ -36,6 +38,10 @@ const Html: FC<HtmlProps> = function ({
       </head>
       <body {...bodyAttributes}>
         <div id="app" dangerouslySetInnerHTML={{ __html: content }}></div>
+        <script>
+          window.__PRELOADED_STATE__ =
+          {JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
+        </script>
         {scriptNodes}
       </body>
     </html>

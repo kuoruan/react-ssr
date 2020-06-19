@@ -2,10 +2,9 @@ const path = require("path");
 
 const Merge = require("webpack-merge");
 
-const webpackBase = require("./webpack.config.base");
-
 const { assetsDir, rootPath } = require("../conf");
 const webpackDev = require("../webpack.dev");
+const webpackBase = require("./webpack.config.base");
 
 module.exports = Merge(webpackBase, webpackDev, {
   entry: [

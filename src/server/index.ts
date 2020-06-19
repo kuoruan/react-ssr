@@ -1,70 +1,34 @@
-import path from "path";
+import app from "./app";
+import { parseArgs, getRunPort } from "./utils";
 
-import Express from "express";
-import PortFinder from "portfinder";
-
-import createHandler from "./handler";
-
-const { clientDir, statsFilename } = require("#/config/conf");
-
-const app = Express();
-
-app.use(Express.static(path.resolve(__dirname, `../${clientDir}`)));
-
-if (process.env.NODE_ENV === "development") {
-  const Webpack = require("webpack");
-  const DevMiddleware = require("webpack-dev-middleware");
-  const HotMiddleware = require("webpack-hot-middleware");
-
-  const { getClientWebpackConfig } = require("#/config/utils");
-  const webpackConfig = getClientWebpackConfig(true);
-
-  const compiler = Webpack(webpackConfig);
-
-  app.use(
-    DevMiddleware(compiler, {
-      // silent log, use `friendly-errors-webpack-plugin`
-      logLevel: "silent",
-      writeToDisk(filePath: string) {
-        return filePath.endsWith(statsFilename);
-      },
-    })
-  );
-  app.use(HotMiddleware(compiler));
+// polyfill fetch
+if (!globalThis.fetch) {
+  const fetch = require("node-fetch");
+  globalThis.fetch = fetch;
 }
 
-const clientStats = path.resolve(__dirname, `../${clientDir}/${statsFilename}`);
+const commandArgs = parseArgs();
 
-app.get("*", createHandler(clientStats));
+getRunPort(String(commandArgs.port), 8000)
+  .then((port) => {
+    const server = app.listen(port, () => {
+      const addr = server.address();
 
-const runPort = Number.isInteger(process.env.PORT)
-  ? Number(process.env.PORT)
-  : 8000;
+      if (addr) {
+        let listen: string;
 
-PortFinder.getPort(
-  {
-    port: runPort,
-  },
-  (err, port) => {
-    if (err) {
-      console.error(err.message);
-    } else {
-      const server = app.listen(port, () => {
-        const addr = server.address();
-
-        if (addr) {
-          let listen: string;
-
-          if (typeof addr === "string") {
-            listen = addr;
-          } else {
-            listen = `${addr.address}${addr.port}`;
-          }
-          console.log(`App listening on ${listen}...`);
+        if (typeof addr === "string") {
+          listen = addr;
+        } else {
+          listen = `${addr.address}${addr.port}`;
         }
+        console.log(`App listening on ${listen}...`);
+      }
 
-        console.log(`Build time: ${process.env.PACKAGE_BUILD_TIME}`);
-      });
-    }
-  }
-);
+      console.log(`Build time: ${process.env.PACKAGE_BUILD_TIME}`);
+      console.log(`Current time: ${new Date().toUTCString()}`);
+    });
+  })
+  .catch((e) => {
+    console.error(e);
+  });
