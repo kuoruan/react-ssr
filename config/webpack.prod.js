@@ -24,7 +24,7 @@ module.exports = {
           },
           output: {
             ecma: 5,
-            preamble: `// Copyright 2019-${new Date().getFullYear()} Opera Inc. All Rights Reserved.`,
+            preamble: `// Copyright 2019-${new Date().getFullYear()} XXX. All Rights Reserved.`,
             comments: /@license/i,
             ascii_only: true,
           },
@@ -37,11 +37,11 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: path.join(assetsDir, "css", "[name].[contenthash:8].css"),
+      filename: path.join(assetsDir, "css", "[name].[contenthash:7].css"),
       chunkFilename: path.join(
         assetsDir,
         "css",
-        "[name].[contenthash:8].chunk.css"
+        "[name].[contenthash:7].chunk.css"
       ),
     }),
   ],

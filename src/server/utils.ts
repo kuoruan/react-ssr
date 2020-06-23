@@ -8,6 +8,7 @@ export function parseArgs(initValue: CommandArgs = {}): CommandArgs {
   return process.argv
     .slice(2)
     .reduce((previousValue, currentValue, currentIndex, array) => {
+      // --a=b
       if (currentValue.indexOf("--") === 0) {
         const splits = currentValue.split("=");
 
@@ -17,6 +18,7 @@ export function parseArgs(initValue: CommandArgs = {}): CommandArgs {
 
           return Object.assign({}, previousValue, { [argFlag]: argValue });
         } else {
+          // --a b
           const argFlag = splits[0].substring(2);
 
           if (currentIndex < array.length - 1) {
@@ -30,6 +32,7 @@ export function parseArgs(initValue: CommandArgs = {}): CommandArgs {
           return Object.assign({}, previousValue, { [argFlag]: true });
         }
       } else if (currentValue.indexOf("-") === 0) {
+        // -a
         const argFlag = currentValue.substring(1);
         return Object.assign({}, previousValue, { [argFlag]: true });
       }

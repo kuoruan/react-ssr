@@ -39,7 +39,7 @@ const Html: FC<HtmlProps> = function ({
       <body {...bodyAttributes}>
         <div id="app" dangerouslySetInnerHTML={{ __html: content }}></div>
         <script>
-          window.__PRELOADED_STATE__ =
+          window.__PRELOADED_STATE__ ={" "}
           {JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
         </script>
         {scriptNodes}

@@ -5,14 +5,14 @@ import RouteConfig from "@/routes/RouteConfig";
 
 import PrivateRoute from "./PrivateRoute";
 
-interface RoutesProps extends SwitchProps {
+interface RoutesSwitchProps extends SwitchProps {
   routes?: RouteConfig[];
 }
 
-const Routes: FC<RoutesProps> = function ({
+const RoutesSwitch: FC<RoutesSwitchProps> = function ({
   routes,
   ...restProps
-}: RoutesProps) {
+}: RoutesSwitchProps) {
   if (!routes || routes.length <= 0) {
     return null;
   }
@@ -23,7 +23,7 @@ const Routes: FC<RoutesProps> = function ({
         route.requiresAuth ? (
           <PrivateRoute
             key={i}
-            redirectPath={route.redirectPath || "/login"}
+            redirectPath={route.redirectPath ?? "/login"}
             path={route.path}
             exact={route.exact}
             strict={route.strict}
@@ -57,4 +57,4 @@ const Routes: FC<RoutesProps> = function ({
   );
 };
 
-export default Routes;
+export default RoutesSwitch;

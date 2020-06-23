@@ -5,7 +5,7 @@ import RouteConfig, { MatchedRoute } from "./RouteConfig";
 export function matchRoutes<Params extends { [K in keyof Params]?: string }>(
   routes: RouteConfig[],
   pathname: string,
-  branch: MatchedRoute<Params>[] = []
+  /* private */ branch: MatchedRoute<Params>[] = []
 ): MatchedRoute<Params>[] {
   routes.some((route) => {
     const match = route.path
@@ -17,7 +17,7 @@ export function matchRoutes<Params extends { [K in keyof Params]?: string }>(
           url: "/",
           params: Object.create(null),
           isExact: pathname === "/",
-        }; // use default "root" match
+        }; // use default "root" match, `React.computeRootMatch(pathname)`
 
     if (match) {
       branch.push({ route, match });

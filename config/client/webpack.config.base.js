@@ -18,7 +18,7 @@ const {
 const { raw } = require("../env");
 const webpackCommon = require("../webpack.common");
 
-const isProduction = raw.NODE_ENV === "production";
+const isDevelopment = raw.NODE_ENV === "development";
 
 module.exports = Merge(webpackCommon, {
   name: "client",
@@ -32,7 +32,7 @@ module.exports = Merge(webpackCommon, {
       {
         test: /\.css$/,
         use: [
-          isProduction ? MiniCssExtractPlugin.loader : "style-loader",
+          isDevelopment ? "style-loader" : MiniCssExtractPlugin.loader,
           "css-loader",
           "postcss-loader",
         ],
@@ -41,7 +41,7 @@ module.exports = Merge(webpackCommon, {
         test: /\.s(c|a)ss$/,
         exclude: [/node_modules/],
         use: [
-          isProduction ? MiniCssExtractPlugin.loader : "style-loader",
+          isDevelopment ? "style-loader" : MiniCssExtractPlugin.loader,
           "css-loader",
           "postcss-loader",
           {

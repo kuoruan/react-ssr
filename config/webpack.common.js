@@ -3,7 +3,9 @@ const path = require("path");
 const Webpack = require("webpack");
 
 const { assetsDir, rootPath } = require("./conf");
-const { stringified } = require("./env");
+const { raw, stringified } = require("./env");
+
+const isDevelopment = raw.NODE_ENV === "development";
 
 module.exports = {
   resolve: {
@@ -33,28 +35,36 @@ module.exports = {
         },
       },
       {
-        test: /\.(png|jpe?g|gif)$/,
+        test: /\.(png|jpe?g|gif)$/i,
         exclude: /node_modules/,
         use: [
           {
             loader: "url-loader",
             options: {
-              limit: 10000,
-              name: path.join(assetsDir, "img", "[name].[hash:8].[ext]"),
+              limit: 8192,
+              name: path.join(
+                assetsDir,
+                "img",
+                isDevelopment ? "[name].[ext]" : "[name].[contenthash:7].[ext]"
+              ),
             },
           },
         ],
       },
       {
-        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)$/,
+        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)$/i,
         loader: "url-loader",
         options: {
-          limit: 10000,
-          name: utils.assetsPath("media/[name].[hash:8].[ext]"),
+          limit: 8192,
+          name: path.join(
+            assetsDir,
+            "media",
+            isDevelopment ? "[name].[ext]" : "[name].[contenthash:7].[ext]"
+          ),
         },
       },
       {
-        test: /\.svg$/,
+        test: /\.svg$/i,
         exclude: /node_modules/,
         use: [
           {
@@ -63,19 +73,27 @@ module.exports = {
           {
             loader: "url-loader",
             options: {
-              limit: 10000,
-              name: path.join(assetsDir, "img", "[name].[hash:8].[ext]"),
+              limit: 8192,
+              name: path.join(
+                assetsDir,
+                "img",
+                isDevelopment ? "[name].[ext]" : "[name].[contenthash:7].[ext]"
+              ),
             },
           },
         ],
       },
       {
-        test: /\.(woff2?|eot|ttf|otf)$/,
+        test: /\.(woff2?|eot|ttf|otf)$/i,
         use: [
           {
             loader: "file-loader",
             options: {
-              name: path.join(assetsDir, "fonts", "[hash:8].[ext]"),
+              name: path.join(
+                assetsDir,
+                "fonts",
+                isDevelopment ? "[name].[ext]" : "[name].[contenthash:7].[ext]"
+              ),
             },
           },
         ],

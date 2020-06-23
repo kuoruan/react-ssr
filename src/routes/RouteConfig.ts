@@ -1,13 +1,18 @@
+import { ParsedQs } from "qs";
+import React from "react";
 import { RouteComponentProps, match as Match } from "react-router";
 
-export interface RouteConfigProps {
-  route: RouteConfig;
+export interface RouteConfigComponentProps<
+  Params extends { [K in keyof Params]?: string } = {}
+> extends RouteComponentProps<Params> {
+  route?: RouteConfig;
 }
 
-type ServerFetchFunc = <P>(
-  url: string,
-  m: Match<P>
-) => Promise<void> | Promise<void>[];
+export type ServerFetchFunc = <P>(
+  m: Match<P>,
+  query: ParsedQs,
+  url: string
+) => Promise<void>;
 
 export interface RouteConfigProperties {
   serverFetch?: ServerFetchFunc;
@@ -15,12 +20,10 @@ export interface RouteConfigProperties {
 
 export default interface RouteConfig {
   component?:
-    | (React.ComponentType<RouteComponentProps<any> & RouteConfigProps> &
+    | (React.ComponentType<RouteConfigComponentProps<any>> &
         RouteConfigProperties)
     | (React.ComponentType<any> & RouteConfigProperties);
-  render?: (
-    props: RouteComponentProps<any> & RouteConfigProps
-  ) => React.ReactNode;
+  render?: (props: RouteConfigComponentProps<any>) => React.ReactNode;
   path?: string | string[];
   exact?: boolean;
   sensitive?: boolean;

@@ -9,14 +9,15 @@ const webpackBase = require("./webpack.config.base");
 module.exports = Merge(webpackBase, webpackProd, {
   entry: path.join(rootPath, "./src/index.tsx"),
   output: {
-    filename: path.join(assetsDir, "js", "[name].[contenthash:8].js"),
+    filename: path.join(assetsDir, "js", "[name].[contenthash:7].js"),
     chunkFilename: path.join(
       assetsDir,
       "js",
-      "[name].[contenthash:8].chunk.js"
+      "[name].[contenthash:7].chunk.js"
     ),
   },
   optimization: {
+    runtimeChunk: true,
     splitChunks: {
       chunks: "all",
       cacheGroups: {

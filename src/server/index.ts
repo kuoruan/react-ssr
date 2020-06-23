@@ -1,7 +1,7 @@
 import app from "./app";
 import { parseArgs, getRunPort } from "./utils";
 
-// polyfill fetch
+// Polyfill fetch, server side
 if (!globalThis.fetch) {
   const fetch = require("node-fetch");
   globalThis.fetch = fetch;

@@ -25,7 +25,6 @@ module.exports = Merge(webpackBase, webpackDev, {
     rules: [
       {
         test: /\.s?(a|c)ss$/,
-        exclude: [/node_modules/],
         loader: "null-loader",
       },
     ],

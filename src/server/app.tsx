@@ -6,10 +6,11 @@ import React from "react";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
 import Helmet from "react-helmet";
 import { StaticContext } from "react-router";
-import { StaticRouter, matchPath } from "react-router-dom";
+import { StaticRouter } from "react-router-dom";
 
 import App from "@/App";
 import routes from "@/routes";
+import { matchRoutes } from "@/routes/utils";
 
 import Html from "./Html";
 
@@ -48,24 +49,16 @@ if (process.env.NODE_ENV === "development") {
 const clientStats = path.resolve(__dirname, `../${clientDir}/${statsFilename}`);
 
 app.get("*", async (req, res, next) => {
-  const promises: Promise<void>[] = [];
+  const branch = matchRoutes(routes, req.path);
 
-  for (const route of routes) {
-    let match;
-    if ((match = matchPath(req.url, route)) && match) {
-      if (route.loadData) {
-        const loadData = route.loadData(match);
-        if (Array.isArray(loadData)) {
-          promises.push(...loadData);
-        } else {
-          promises.push(loadData);
-        }
-      }
-      break;
-    }
-  }
+  const promises: Promise<void>[] = branch.map(({ route, match }) => {
+    return route.component?.serverFetch
+      ? route.component.serverFetch(match, req.query, req.url)
+      : Promise.resolve();
+  });
 
   await Promise.allSettled(promises);
+
   const clientExtractor = new ChunkExtractor({
     statsFile: clientStats,
   });

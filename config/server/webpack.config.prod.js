@@ -16,7 +16,7 @@ module.exports = Merge(webpackBase, webpackProd, {
     chunkFilename: path.join(
       assetsDir,
       "js",
-      "[name].[contenthash:8].chunk.js"
+      "[name].[contenthash:7].chunk.js"
     ),
   },
   module: {
