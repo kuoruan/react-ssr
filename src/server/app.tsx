@@ -114,7 +114,7 @@ app.get("*", async (req, res, next) => {
 });
 
 if (module.hot) {
-  module.hot.accept(["@/App"], () => {
+  module.hot.accept(["@/App", "@/routes"], () => {
     console.log("🔁 Server-side HMR Reloading...");
   });
 
