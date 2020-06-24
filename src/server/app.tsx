@@ -25,6 +25,11 @@ const app = Express();
 app.use(Express.static(path.resolve(__dirname, `../${clientDir}`)));
 
 if (process.env.NODE_ENV === "development") {
+  // add error handler
+  const errorhandler = require("errorhandler");
+  app.use(errorhandler());
+
+  // add dev and hot middlewares
   const Webpack = require("webpack");
   const DevMiddleware = require("webpack-dev-middleware");
   const HotMiddleware = require("webpack-hot-middleware");
