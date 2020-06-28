@@ -37,6 +37,13 @@ module.exports = {
         "newlines-between": "always",
       },
     ],
+    "import/dynamic-import-chunkname": [
+      "error",
+      {
+        importFunctions: ["dynamicImport"],
+        webpackChunknameFormat: "[a-zA-Z0-9-/_]+",
+      },
+    ],
   },
   settings: {
     react: {
