@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { SwitchProps, Switch, Route } from "react-router-dom";
 
-import RouteConfig from "@/routes/RouteConfig";
+import { RouteConfig } from "@/routes/types";
 
 import PrivateRoute from "./PrivateRoute";
 

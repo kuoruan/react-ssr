@@ -5,12 +5,15 @@ import Express from "express";
 import React from "react";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
 import Helmet from "react-helmet";
+import { Provider as ReduxProvider } from "react-redux";
 import { StaticContext } from "react-router";
 import { StaticRouter } from "react-router-dom";
 
 import App from "@/App";
+import configureHistory from "@/configure/history";
 import routes from "@/routes";
 import { matchRoutes } from "@/routes/utils";
+import initStore from "@/store";
 
 import Html from "./Html";
 
@@ -70,10 +73,15 @@ app.get("*", async (req, res, next) => {
 
   const context: ServerRouterContext = {};
 
+  const history = configureHistory(req.url);
+  const store = initStore(history);
+
   const markup = renderToString(
     <ChunkExtractorManager extractor={clientExtractor}>
       <StaticRouter location={req.url} context={context}>
-        <App />
+        <ReduxProvider store={store}>
+          <App />
+        </ReduxProvider>
       </StaticRouter>
     </ChunkExtractorManager>
   );
@@ -92,6 +100,8 @@ app.get("*", async (req, res, next) => {
     const metaComponent = helmet.meta.toComponent();
     const linkComponent = helmet.link.toComponent();
 
+    const preloadedState = store.getState();
+
     const html = renderToStaticMarkup(
       <Html
         htmlAttributes={htmlAttributes}
@@ -102,7 +112,7 @@ app.get("*", async (req, res, next) => {
         styleNodes={styleElements}
         scriptNodes={scriptElements}
         content={markup}
-        preloadedState={{}}
+        preloadedState={preloadedState}
       />
     );
 

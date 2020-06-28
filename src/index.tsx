@@ -1,21 +1,31 @@
 import "whatwg-fetch";
 import { loadableReady } from "@loadable/component";
+import { ConnectedRouter } from "connected-react-router";
 import React from "react";
 import { hydrate } from "react-dom";
+import { Provider as ReduxProvider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
+
+import configureHistory from "@/configure/history";
+import initStore from "@/store";
 
 import App from "./App";
 
+const preloadedState = window.__PRELOADED_STATE__;
+delete window.__PRELOADED_STATE__;
+
+const history = configureHistory();
+const store = initStore(history, preloadedState);
+
 loadableReady(() => {
   const render = () => {
-    const data = window.__PRELOADED_STATE__;
-
-    // Allow the passed state to be garbage-collected
-    delete window.__PRELOADED_STATE__;
-
     hydrate(
       <BrowserRouter>
-        <App />
+        <ReduxProvider store={store}>
+          <ConnectedRouter history={history}>
+            <App />
+          </ConnectedRouter>
+        </ReduxProvider>
       </BrowserRouter>,
       document.getElementById("app")
     );

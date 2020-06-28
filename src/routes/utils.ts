@@ -1,6 +1,6 @@
 import { matchPath } from "react-router";
 
-import RouteConfig, { MatchedRoute } from "./RouteConfig";
+import { RouteConfig, MatchedRoute } from "./types";
 
 export function matchRoutes<Params extends { [K in keyof Params]?: string }>(
   routes: RouteConfig[],

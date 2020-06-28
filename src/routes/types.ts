@@ -18,7 +18,7 @@ export interface RouteConfigProperties {
   serverFetch?: ServerFetchFunc;
 }
 
-export default interface RouteConfig {
+export interface RouteConfig {
   component?:
     | (React.ComponentType<RouteConfigComponentProps<any>> &
         RouteConfigProperties)

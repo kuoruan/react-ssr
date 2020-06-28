@@ -2,7 +2,7 @@ import React, { FC, HTMLProps } from "react";
 import { useRouteMatch, Link } from "react-router-dom";
 
 import RoutesSwitch from "@/components/RoutesSwitch";
-import { RouteConfigComponentProps } from "@/routes/RouteConfig";
+import { RouteConfigComponentProps } from "@/routes/types";
 
 interface AboutProps
   extends HTMLProps<HTMLDivElement>,

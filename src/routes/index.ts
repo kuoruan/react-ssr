@@ -5,7 +5,7 @@ import NotFound from "@/views/not-found";
 import Protected from "@/views/protected";
 import Topic from "@/views/topic";
 
-import RouteConfig from "./RouteConfig";
+import { RouteConfig } from "./types";
 
 const routes: RouteConfig[] = [
   {
