@@ -17,11 +17,11 @@ module.exports = Merge(webpackCommon, {
     libraryTarget: "commonjs2",
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new Webpack.DefinePlugin({
       __isClient__: "false",
       __isServer__: "true",
     }),
-    new CleanWebpackPlugin(),
   ],
   node: {
     __dirname: false,

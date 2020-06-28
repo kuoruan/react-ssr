@@ -20,12 +20,11 @@ module.exports = Merge(webpackBase, webpackDev, {
   output: {
     chunkFilename: path.join(assetsDir, "js", "[name].chunk.js"),
   },
-  // ignore css files in dev, insert styles with client style-loader
   module: {
     rules: [
       {
         test: /\.s?(a|c)ss$/,
-        loader: "null-loader",
+        loader: "null-loader", // ignore css files in dev, insert styles with client style-loader
       },
     ],
   },

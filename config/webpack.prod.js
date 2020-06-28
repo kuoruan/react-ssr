@@ -1,9 +1,4 @@
-const path = require("path");
-
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-
-const { assetsDir } = require("./conf");
 
 module.exports = {
   mode: "production",
@@ -35,14 +30,4 @@ module.exports = {
       }),
     ],
   },
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename: path.join(assetsDir, "css", "[name].[contenthash:7].css"),
-      chunkFilename: path.join(
-        assetsDir,
-        "css",
-        "[name].[contenthash:7].chunk.css"
-      ),
-    }),
-  ],
 };

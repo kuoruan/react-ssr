@@ -43,4 +43,14 @@ module.exports = Merge(webpackBase, webpackProd, {
     ],
   },
   externals: [NodeExternals()],
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: path.join(assetsDir, "css", "[name].[contenthash:7].css"),
+      chunkFilename: path.join(
+        assetsDir,
+        "css",
+        "[name].[contenthash:7].chunk.css"
+      ),
+    }),
+  ],
 });

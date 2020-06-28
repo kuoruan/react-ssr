@@ -1,5 +1,6 @@
 const path = require("path");
 
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const Merge = require("webpack-merge");
 
 const { assetsDir, rootPath } = require("../conf");
@@ -33,4 +34,14 @@ module.exports = Merge(webpackBase, webpackProd, {
       },
     },
   },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: path.join(assetsDir, "css", "[name].[contenthash:7].css"),
+      chunkFilename: path.join(
+        assetsDir,
+        "css",
+        "[name].[contenthash:7].chunk.css"
+      ),
+    }),
+  ],
 });
