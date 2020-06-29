@@ -1,7 +1,13 @@
-import React, { FC, HTMLProps, HTMLAttributes, ReactNode } from "react";
+import React, {
+  FC,
+  HTMLProps,
+  HtmlHTMLAttributes,
+  HTMLAttributes,
+  ReactNode,
+} from "react";
 
 interface HtmlProps extends HTMLProps<HTMLHtmlElement> {
-  htmlAttributes: HTMLAttributes<HTMLHtmlElement>;
+  htmlAttributes: HtmlHTMLAttributes<HTMLHtmlElement>;
   bodyAttributes: HTMLAttributes<HTMLBodyElement>;
   titleNode: ReactNode;
   metaNode: ReactNode;
@@ -20,7 +26,6 @@ const Html: FC<HtmlProps> = function ({
   linkNodes,
   styleNodes,
   scriptNodes,
-  children,
   content,
   preloadedState,
   ...restProps

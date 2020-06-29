@@ -57,11 +57,24 @@ if (process.env.NODE_ENV === "development") {
 const clientStats = path.resolve(__dirname, `../${clientDir}/${statsFilename}`);
 
 app.get("*", async (req, res, next) => {
+  const location = req.url;
+
+  const history = configureHistory(location);
+  const store = initStore(history);
+
   const branch = matchRoutes(routes, req.path);
 
   const promises: Promise<void>[] = branch.map(({ route, match }) => {
     return route.component?.serverFetch
-      ? route.component.serverFetch(match, req.query, req.url)
+      ? route.component.serverFetch(
+          {
+            location: location,
+            path: req.path,
+            params: match.params,
+            query: req.query,
+          },
+          store
+        )
       : Promise.resolve();
   });
 
@@ -73,16 +86,13 @@ app.get("*", async (req, res, next) => {
 
   const context: ServerRouterContext = {};
 
-  const history = configureHistory(req.url);
-  const store = initStore(history);
-
   const markup = renderToString(
     <ChunkExtractorManager extractor={clientExtractor}>
-      <StaticRouter location={req.url} context={context}>
-        <ReduxProvider store={store}>
+      <ReduxProvider store={store}>
+        <StaticRouter location={location} context={context}>
           <App />
-        </ReduxProvider>
-      </StaticRouter>
+        </StaticRouter>
+      </ReduxProvider>
     </ChunkExtractorManager>
   );
 

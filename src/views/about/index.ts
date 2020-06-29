@@ -1,6 +1,7 @@
 import loadable from "@loadable/component";
 
 import { RouteConfigProperties } from "@/routes/types";
+import fetchUserInfo from "@/store/system/fetchUserInfo";
 
 const component = loadable(() =>
   import(/* webpackChunkName: "views" */ "./About")
@@ -8,8 +9,8 @@ const component = loadable(() =>
 
 const About: typeof component & RouteConfigProperties = component;
 
-About.serverFetch = function () {
-  return Promise.resolve();
+About.serverFetch = function (_, store) {
+  return store.dispatch<any>(fetchUserInfo());
 };
 
 export default About;

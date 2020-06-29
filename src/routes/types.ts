@@ -2,16 +2,24 @@ import { ParsedQs } from "qs";
 import React from "react";
 import { RouteComponentProps, match as Match } from "react-router";
 
+import initStore from "@/store";
+
+type RouteDetail = {
+  location: string;
+  path: string;
+  query: ParsedQs;
+  params: { [key: string]: string };
+};
+
 export interface RouteConfigComponentProps<
   Params extends { [K in keyof Params]?: string } = {}
 > extends RouteComponentProps<Params> {
   route?: RouteConfig;
 }
 
-export type ServerFetchFunc = <P>(
-  m: Match<P>,
-  query: ParsedQs,
-  url: string
+export type ServerFetchFunc = (
+  route: RouteDetail,
+  store: ReturnType<typeof initStore>
 ) => Promise<void>;
 
 export interface RouteConfigProperties {

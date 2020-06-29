@@ -8,17 +8,15 @@ import initRootReducer from "./rootReducer";
 
 export type RootState = ReturnType<typeof initRootReducer>;
 
-export default function initStore(history: History, preloadedState?: any) {
-  const rootReducer = initRootReducer(history);
-
+export default function initStore(history: History, preloadedState: any = {}) {
   const middlewares: Middleware[] = [routerMiddleware(history), thunk];
 
-  if (process.env.NODE_ENV !== "production") {
+  if (__isClient__ && process.env.NODE_ENV !== "production") {
     middlewares.push(createLogger());
   }
 
   return createStore(
-    rootReducer,
+    initRootReducer(history),
     preloadedState,
     compose(applyMiddleware(...middlewares))
   );
