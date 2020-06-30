@@ -36,6 +36,7 @@ module.exports = Merge(webpackBase, webpackDev, {
   plugins: [
     new StartServerPlugin({
       name: "server.js",
+      signal: true,
     }),
   ],
 });

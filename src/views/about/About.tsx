@@ -1,8 +1,10 @@
 import React, { FC, HTMLProps } from "react";
+import { useSelector } from "react-redux";
 import { useRouteMatch, Link } from "react-router-dom";
 
 import RoutesSwitch from "@/components/RoutesSwitch";
 import { RouteConfigComponentProps } from "@/routes/types";
+import { getUsername } from "@/store/selectors";
 
 interface AboutProps
   extends HTMLProps<HTMLDivElement>,
@@ -10,6 +12,9 @@ interface AboutProps
 
 const About: FC<AboutProps> = function ({ route }: AboutProps) {
   let { url } = useRouteMatch();
+
+  const userName = useSelector(getUsername);
+
   return (
     <div>
       <h2>This is About page.</h2>
@@ -25,6 +30,8 @@ const About: FC<AboutProps> = function ({ route }: AboutProps) {
         </li>
       </ul>
       <RoutesSwitch routes={route?.routes} />
+
+      <p>{userName}</p>
     </div>
   );
 };

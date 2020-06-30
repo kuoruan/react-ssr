@@ -6,9 +6,12 @@ import thunk from "redux-thunk";
 
 import initRootReducer from "./rootReducer";
 
-export type RootState = ReturnType<typeof initRootReducer>;
+export type RootState = ReturnType<ReturnType<typeof initRootReducer>>;
 
-export default function initStore(history: History, preloadedState: any = {}) {
+const composeEnhancers =
+  (__isClient__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+
+const initStore = (history: History, preloadedState: any = {}) => {
   const middlewares: Middleware[] = [routerMiddleware(history), thunk];
 
   if (__isClient__ && process.env.NODE_ENV !== "production") {
@@ -18,6 +21,8 @@ export default function initStore(history: History, preloadedState: any = {}) {
   return createStore(
     initRootReducer(history),
     preloadedState,
-    compose(applyMiddleware(...middlewares))
+    composeEnhancers(applyMiddleware(...middlewares))
   );
-}
+};
+
+export default initStore;

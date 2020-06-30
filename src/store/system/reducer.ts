@@ -6,7 +6,7 @@ const initialState: SystemState = {
   userName: "",
 };
 
-export function systemReducer(
+export default function systemReducer(
   state = initialState,
   action: SystemActionTypes
 ): SystemState {

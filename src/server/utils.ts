@@ -1,43 +1,10 @@
+import Minimist from "minimist";
 import PortFinder from "portfinder";
 
-type CommandArgs = {
-  [key: string]: string | boolean;
-};
-
-export function parseArgs(initValue: CommandArgs = {}): CommandArgs {
-  return process.argv
-    .slice(2)
-    .reduce((previousValue, currentValue, currentIndex, array) => {
-      // --a=b
-      if (currentValue.indexOf("--") === 0) {
-        const splits = currentValue.split("=");
-
-        if (splits.length > 1) {
-          const argFlag = splits[0].substring(2);
-          const argValue = splits[1];
-
-          return Object.assign({}, previousValue, { [argFlag]: argValue });
-        } else {
-          // --a b
-          const argFlag = splits[0].substring(2);
-
-          if (currentIndex < array.length - 1) {
-            const argValue = array[currentIndex + 1];
-
-            if (argValue.indexOf("-") < 0) {
-              return Object.assign({}, previousValue, { [argFlag]: argValue });
-            }
-          }
-
-          return Object.assign({}, previousValue, { [argFlag]: true });
-        }
-      } else if (currentValue.indexOf("-") === 0) {
-        // -a
-        const argFlag = currentValue.substring(1);
-        return Object.assign({}, previousValue, { [argFlag]: true });
-      }
-      return previousValue;
-    }, initValue);
+export function parseArgs(initValue?: {
+  [key: string]: number | boolean | string;
+}) {
+  return Minimist(process.argv.slice(2), { default: initValue });
 }
 
 export function getRunPort(
