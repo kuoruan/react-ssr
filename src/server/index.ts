@@ -9,7 +9,7 @@ if (!globalThis.fetch) {
 
 const commandArgs = parseArgs();
 
-getRunPort(commandArgs.port, 8000)
+getRunPort(String(commandArgs.port), 8000)
   .then((port) => {
     const server = app.listen(port, () => {
       const addr = server.address();
