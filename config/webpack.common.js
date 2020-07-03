@@ -5,7 +5,7 @@ const Webpack = require("webpack");
 const { assetsDir, rootPath } = require("./conf");
 const { raw, stringified } = require("./env");
 
-const isDevelopment = raw.NODE_ENV === "development";
+const isDevelopment = raw.NODE_ENV !== "production";
 
 module.exports = {
   resolve: {
@@ -18,7 +18,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|ts)x?$/,
+        test: /\.[jt]sx?$/,
         use: {
           loader: "babel-loader",
           options: {

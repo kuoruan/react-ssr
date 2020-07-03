@@ -6,8 +6,6 @@ import thunk from "redux-thunk";
 
 import initRootReducer from "./rootReducer";
 
-export type RootState = ReturnType<ReturnType<typeof initRootReducer>>;
-
 const composeEnhancers =
   (__isClient__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 

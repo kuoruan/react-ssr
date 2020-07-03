@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const Merge = require("webpack-merge");
 const NodeExternals = require("webpack-node-externals");
 
-const { assetsDir, rootPath, scssPrependData } = require("../conf");
+const { assetsDir, rootPath, sassAdditionalData } = require("../conf");
 const webpackProd = require("../webpack.prod");
 const webpackBase = require("./webpack.config.base");
 
@@ -35,7 +35,7 @@ module.exports = Merge(webpackBase, webpackProd, {
           {
             loader: "sass-loader",
             options: {
-              prependData: scssPrependData,
+              additionalData: sassAdditionalData,
             },
           },
         ],

@@ -1,7 +1,8 @@
 import React, { FC } from "react";
+import { useSelector } from "react-redux";
 import { Route, RouteProps, Redirect } from "react-router-dom";
 
-import auth from "@/auth";
+import { isLoggedIn } from "@/store/selectors";
 
 interface PrivateRouteProps extends RouteProps {
   redirectPath: string;
@@ -14,11 +15,13 @@ const PrivateRoute: FC<PrivateRouteProps> = function ({
   component: Component,
   ...restProps
 }: PrivateRouteProps) {
+  const loggedIn = useSelector(isLoggedIn);
+
   return (
     <Route
       {...restProps}
       render={(props) => {
-        if (auth.isAuthenticated) {
+        if (loggedIn) {
           if (render) {
             return render({ ...props });
           } else if (Component) {

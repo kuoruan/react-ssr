@@ -1,7 +1,7 @@
 import loadable from "@loadable/component";
 
 import { RouteConfigProperties } from "@/routes/types";
-import fetchUserInfo from "@/store/system/fetchUserInfo";
+import { fetchUserInfo } from "@/store/system/thunks";
 
 const component = loadable(() =>
   import(/* webpackChunkName: "views" */ "./About")

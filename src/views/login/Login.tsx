@@ -1,20 +1,20 @@
 import React, { FC, HTMLProps } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 
-import auth from "@/auth";
+import { fetchUserInfo } from "@/store/system/thunks";
 
 interface LoginProps extends HTMLProps<HTMLDivElement> {}
 
 const Login: FC<LoginProps> = function (props: LoginProps) {
-  const history = useHistory();
   const location = useLocation<{ from: Location }>();
+
+  const dispath = useDispatch();
 
   const { from } = location.state || { from: { pathname: "/" } };
 
   const login: React.MouseEventHandler = () => {
-    auth.authenticate(() => {
-      history.replace(from);
-    });
+    dispath(fetchUserInfo());
   };
 
   return (

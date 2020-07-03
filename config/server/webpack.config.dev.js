@@ -23,7 +23,7 @@ module.exports = Merge(webpackBase, webpackDev, {
   module: {
     rules: [
       {
-        test: /\.s?(a|c)ss$/,
+        test: /\.s?[ac]ss$/,
         loader: "null-loader", // ignore css files in dev, insert styles with client style-loader
       },
     ],

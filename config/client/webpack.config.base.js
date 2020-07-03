@@ -12,13 +12,13 @@ const {
   distDir,
   publicPath,
   rootPath,
-  scssPrependData,
+  sassAdditionalData,
   statsFilename,
 } = require("../conf");
 const { raw } = require("../env");
 const webpackCommon = require("../webpack.common");
 
-const isDevelopment = raw.NODE_ENV === "development";
+const isDevelopment = raw.NODE_ENV !== "production";
 
 module.exports = Merge(webpackCommon, {
   name: "client",
@@ -38,7 +38,7 @@ module.exports = Merge(webpackCommon, {
         ],
       },
       {
-        test: /\.s(c|a)ss$/,
+        test: /\.s[ac]ss$/,
         exclude: [/node_modules/],
         use: [
           isDevelopment ? "style-loader" : MiniCssExtractPlugin.loader,
@@ -47,7 +47,7 @@ module.exports = Merge(webpackCommon, {
           {
             loader: "sass-loader",
             options: {
-              prependData: scssPrependData,
+              additionalData: sassAdditionalData,
             },
           },
         ],
