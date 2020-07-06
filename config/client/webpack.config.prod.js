@@ -25,11 +25,17 @@ module.exports = Merge(webpackBase, webpackProd, {
         react: {
           test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
           name: "react",
-          enforce: true,
+          priority: 10,
         },
-        vendor: {
-          test: /[\\/]node_modules[\\/](!react)(!react-dom)[\\/]/,
-          name: "vendor",
+        vendors: {
+          test: /node_modules/,
+          priority: -10,
+          name: "vendors",
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
         },
       },
     },
