@@ -1,6 +1,6 @@
 const appConfig = require("../app.config");
 
-const baseConfig = {
+const defaultConfig = {
   rootPath: process.cwd(),
   distDir: "dist",
   clientDir: "client",
@@ -11,4 +11,4 @@ const baseConfig = {
   statsFilename: "loadable-stats.json",
 };
 
-module.exports = Object.assign({}, baseConfig, appConfig);
+module.exports = Object.assign({}, defaultConfig, appConfig);
