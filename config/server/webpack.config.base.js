@@ -2,12 +2,12 @@ const path = require("path");
 
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const Webpack = require("webpack");
-const Merge = require("webpack-merge");
+const { merge } = require("webpack-merge");
 
 const { distDir, publicPath, rootPath, serverDir } = require("../conf");
 const webpackCommon = require("../webpack.common");
 
-module.exports = Merge(webpackCommon, {
+module.exports = merge(webpackCommon, {
   name: "server",
   target: "node",
   output: {

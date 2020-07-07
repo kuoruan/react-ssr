@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const Webpack = require("webpack");
-const Merge = require("webpack-merge");
+const { merge } = require("webpack-merge");
 
 const {
   clientDir,
@@ -20,7 +20,7 @@ const webpackCommon = require("../webpack.common");
 
 const isDevelopment = raw.NODE_ENV !== "production";
 
-module.exports = Merge(webpackCommon, {
+module.exports = merge(webpackCommon, {
   name: "client",
   target: "web",
   output: {
@@ -39,7 +39,7 @@ module.exports = Merge(webpackCommon, {
       },
       {
         test: /\.s[ac]ss$/,
-        exclude: [/node_modules/],
+        exclude: /node_modules/,
         use: [
           isDevelopment ? "style-loader" : MiniCssExtractPlugin.loader,
           "css-loader",

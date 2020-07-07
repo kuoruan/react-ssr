@@ -19,57 +19,53 @@ module.exports = {
     rules: [
       {
         test: /\.[jt]sx?$/,
+        exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
             cacheDirectory: true,
           },
         },
-        exclude: [/node_modules/],
       },
       {
         test: /\.js$/,
         enforce: "pre",
-        use: {
-          loader: "source-map-loader",
-        },
+        use: "source-map-loader",
       },
       {
         test: /\.(png|jpe?g|gif)$/i,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: "url-loader",
-            options: {
-              limit: 8192,
-              name: path.join(
-                assetsDir,
-                "img",
-                isDevelopment ? "[name].[ext]" : "[name].[contenthash:7].[ext]"
-              ),
-            },
+        use: {
+          loader: "url-loader",
+          options: {
+            limit: 8192,
+            name: path.join(
+              assetsDir,
+              "img",
+              isDevelopment ? "[name].[ext]" : "[name].[contenthash:7].[ext]"
+            ),
           },
-        ],
+        },
       },
       {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)$/i,
-        loader: "url-loader",
-        options: {
-          limit: 8192,
-          name: path.join(
-            assetsDir,
-            "media",
-            isDevelopment ? "[name].[ext]" : "[name].[contenthash:7].[ext]"
-          ),
+        use: {
+          loader: "url-loader",
+          options: {
+            limit: 8192,
+            name: path.join(
+              assetsDir,
+              "media",
+              isDevelopment ? "[name].[ext]" : "[name].[contenthash:7].[ext]"
+            ),
+          },
         },
       },
       {
         test: /\.svg$/i,
         exclude: /node_modules/,
         use: [
-          {
-            loader: "@svgr/webpack",
-          },
+          "@svgr/webpack",
           {
             loader: "url-loader",
             options: {

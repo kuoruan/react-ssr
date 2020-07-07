@@ -1,7 +1,7 @@
 const path = require("path");
 
 const StartServerPlugin = require("start-server-webpack-plugin");
-const Merge = require("webpack-merge");
+const { merge } = require("webpack-merge");
 const NodeExternals = require("webpack-node-externals");
 
 const { assetsDir, rootPath } = require("../conf");
@@ -10,7 +10,7 @@ const webpackBase = require("./webpack.config.base");
 
 // https://docs.nestjs.com/recipes/hot-reload
 
-module.exports = Merge(webpackBase, webpackDev, {
+module.exports = merge(webpackBase, webpackDev, {
   entry: {
     server: [
       "webpack/hot/poll?1000",
@@ -24,7 +24,7 @@ module.exports = Merge(webpackBase, webpackDev, {
     rules: [
       {
         test: /\.s?[ac]ss$/,
-        loader: "null-loader", // ignore css files in dev, insert styles with client style-loader
+        use: "null-loader", // ignore css files in dev, insert styles with client style-loader
       },
     ],
   },

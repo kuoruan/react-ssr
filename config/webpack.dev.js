@@ -8,10 +8,10 @@ module.exports = {
   module: {
     rules: [
       {
-        enforce: "pre",
-        test: /.(js|ts)x?$/,
+        test: /.[jt]sx?$/,
         exclude: /node_modules/,
-        loader: "eslint-loader",
+        enforce: "pre",
+        use: "eslint-loader",
       },
     ],
   },

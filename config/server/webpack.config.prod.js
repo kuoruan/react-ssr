@@ -1,14 +1,14 @@
 const path = require("path");
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const Merge = require("webpack-merge");
+const { merge } = require("webpack-merge");
 const NodeExternals = require("webpack-node-externals");
 
 const { assetsDir, rootPath, sassAdditionalData } = require("../conf");
 const webpackProd = require("../webpack.prod");
 const webpackBase = require("./webpack.config.base");
 
-module.exports = Merge(webpackBase, webpackProd, {
+module.exports = merge(webpackBase, webpackProd, {
   entry: {
     server: path.join(rootPath, "./src/server/index.ts"),
   },
@@ -27,7 +27,7 @@ module.exports = Merge(webpackBase, webpackProd, {
       },
       {
         test: /\.s(c|a)ss$/,
-        exclude: [/node_modules/],
+        exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
           "css-loader",

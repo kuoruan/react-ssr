@@ -1,13 +1,13 @@
 const path = require("path");
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const Merge = require("webpack-merge");
+const { merge } = require("webpack-merge");
 
 const { assetsDir, rootPath } = require("../conf");
 const webpackProd = require("../webpack.prod");
 const webpackBase = require("./webpack.config.base");
 
-module.exports = Merge(webpackBase, webpackProd, {
+module.exports = merge(webpackBase, webpackProd, {
   entry: path.join(rootPath, "./src/index.tsx"),
   output: {
     filename: path.join(assetsDir, "js", "[name].[contenthash:7].js"),
