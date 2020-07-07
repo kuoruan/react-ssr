@@ -74,7 +74,8 @@
 
     /* Advanced Options */
     "skipLibCheck": true,                     /* Skip type checking of declaration files. */
-    "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
+    "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
+    "importsNotUsedAsValues": "preserve"      /* Recommended by fork-ts-checker-webpack-plugin */
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": [

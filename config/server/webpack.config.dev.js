@@ -13,7 +13,7 @@ const webpackBase = require("./webpack.config.base");
 module.exports = merge(webpackBase, webpackDev, {
   entry: {
     server: [
-      "webpack/hot/poll?1000",
+      "webpack/hot/signal",
       path.join(rootPath, "./src/server/index.ts"),
     ],
   },
@@ -30,7 +30,7 @@ module.exports = merge(webpackBase, webpackDev, {
   },
   externals: [
     NodeExternals({
-      whitelist: ["webpack/hot/poll?1000"],
+      whitelist: ["webpack/hot/signal"],
     }),
   ],
   plugins: [
