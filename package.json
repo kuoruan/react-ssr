@@ -15,6 +15,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@babel/runtime": "^7.10.4",
     "@loadable/component": "^5.13.1",
     "@loadable/server": "^5.13.1",
     "connected-react-router": "^6.8.0",
@@ -45,7 +46,6 @@
     "@babel/preset-env": "^7.10.4",
     "@babel/preset-react": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
-    "@babel/runtime": "^7.10.4",
     "@loadable/babel-plugin": "^5.13.0",
     "@loadable/webpack-plugin": "^5.13.0",
     "@svgr/webpack": "^5.4.0",
