@@ -39,6 +39,7 @@ const raw = Object.keys(process.env)
     },
     {
       NODE_ENV: process.env.NODE_ENV,
+      MODE: runMode,
       PACKAGE_BUILD_TIME: new Date().toLocaleString(),
     }
   );
