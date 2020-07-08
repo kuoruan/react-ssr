@@ -12,15 +12,19 @@ const commandArgs = parseArgs();
 getRunPort(String(commandArgs.port), 8000)
   .then((port) => {
     const server = app.listen(port, () => {
-      const addr = server.address();
+      let addr;
 
-      if (addr) {
+      if ((addr = server.address())) {
         let listen: string;
 
         if (typeof addr === "string") {
           listen = addr;
         } else {
-          listen = `${addr.address}${addr.port}`;
+          if (addr.family === "IPv6") {
+            listen = `[${addr.address}]:${addr.port}`;
+          } else {
+            listen = `${addr.address}:${addr.port}`;
+          }
         }
         console.log(`App listening on ${listen}...`);
       }

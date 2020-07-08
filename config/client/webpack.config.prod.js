@@ -1,6 +1,7 @@
 const path = require("path");
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { merge } = require("webpack-merge");
 
 const { assetsDir, rootPath } = require("../conf");
@@ -48,6 +49,10 @@ module.exports = merge(webpackBase, webpackProd, {
         "css",
         "[name].[contenthash:7].chunk.css"
       ),
+    }),
+    new BundleAnalyzerPlugin({
+      analyzerMode: "disabled",
+      generateStatsFile: true,
     }),
   ],
 });

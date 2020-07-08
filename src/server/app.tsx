@@ -51,7 +51,11 @@ if (process.env.NODE_ENV === "development") {
       },
     })
   );
-  app.use(HotMiddleware(compiler));
+  app.use(
+    HotMiddleware(compiler, {
+      log: false,
+    })
+  );
 }
 
 const clientStats = path.resolve(__dirname, `../${clientDir}/${statsFilename}`);
