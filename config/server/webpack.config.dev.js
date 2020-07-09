@@ -30,7 +30,7 @@ module.exports = merge(webpackBase, webpackDev, {
   },
   externals: [
     NodeExternals({
-      whitelist: ["webpack/hot/signal"],
+      allowlist: ["webpack/hot/signal"],
     }),
   ],
   plugins: [
