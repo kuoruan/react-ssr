@@ -82,7 +82,7 @@
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "7.20.0",
-    "eslint-plugin-react-hooks": "^4.0.7",
+    "eslint-plugin-react-hooks": "^4.0.8",
     "express": "^4.17.1",
     "fork-ts-checker-webpack-plugin": "^5.0.7",
     "friendly-errors-webpack-plugin": "^1.7.0",
