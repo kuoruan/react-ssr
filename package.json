@@ -15,7 +15,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@babel/runtime": "^7.10.4",
+    "@babel/runtime": "^7.10.5",
     "@loadable/component": "^5.13.1",
     "@loadable/server": "^5.13.1",
     "connected-react-router": "^6.8.0",
