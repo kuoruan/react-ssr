@@ -3,6 +3,9 @@ const TerserPlugin = require("terser-webpack-plugin");
 module.exports = {
   mode: "production",
   devtool: "nosources-source-map",
+  performance: {
+    hints: false,
+  },
   optimization: {
     minimize: true,
     minimizer: [
