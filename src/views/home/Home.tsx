@@ -1,12 +1,14 @@
+import "./Home.scss";
+
 import React, { FC, HTMLProps, useState } from "react";
 import { Helmet } from "react-helmet";
-
-import "./Home.scss";
+import { Link, useRouteMatch } from "react-router-dom";
 
 interface HomeProps extends HTMLProps<HTMLDivElement> {}
 
 const Home: FC<HomeProps> = function (props: HomeProps) {
   const [inp, setInp] = useState<string>("");
+  const { url } = useRouteMatch();
 
   return (
     <>
@@ -24,6 +26,11 @@ const Home: FC<HomeProps> = function (props: HomeProps) {
         />
         <p>Input value: {inp}</p>
       </div>
+      <ul>
+        <li>
+          <Link to={`${url}about`}>About</Link>
+        </li>
+      </ul>
     </>
   );
 };

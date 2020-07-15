@@ -1,11 +1,14 @@
 import "whatwg-fetch";
 import { loadableReady } from "@loadable/component";
 import { ConnectedRouter } from "connected-react-router";
+import Qs from "qs";
 import React from "react";
 import { hydrate } from "react-dom";
 import { Provider as ReduxProvider } from "react-redux";
 
 import configureHistory from "@/configure/history";
+import routes from "@/routes";
+import { matchRoutes } from "@/routes/utils";
 import initStore from "@/store";
 
 import App from "./App";
@@ -15,6 +18,24 @@ delete window.__PRELOADED_STATE__;
 
 const history = configureHistory();
 const store = initStore(history, preloadedState);
+
+history.listen((loc) => {
+  const branch = matchRoutes(routes, loc.pathname);
+
+  const promises: Promise<void>[] = branch.map(({ route, match }) => {
+    return route.component?.fetchData
+      ? route.component.fetchData({
+          url: `${loc.pathname}${loc.search}${loc.hash}`,
+          pathname: loc.pathname,
+          params: match.params,
+          query: Qs.parse(loc.search, { ignoreQueryPrefix: true }),
+          store: store,
+        })
+      : Promise.resolve();
+  });
+
+  Promise.allSettled(promises);
+});
 
 loadableReady(() => {
   const render = () => {

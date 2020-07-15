@@ -8,7 +8,7 @@ const component = loadable(() =>
 
 const Topic: typeof component & RouteConfigProperties = component;
 
-Topic.serverFetch = function () {
+Topic.fetchData = function () {
   return Promise.resolve();
 };
 

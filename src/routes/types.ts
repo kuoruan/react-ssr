@@ -4,11 +4,12 @@ import { RouteComponentProps, match as Match } from "react-router";
 
 import initStore from "@/store";
 
-type RouteDetail = {
-  location: string;
-  path: string;
-  query: ParsedQs;
+type PageContext = {
+  url: string;
+  pathname: string;
   params: { [key: string]: string };
+  query: ParsedQs;
+  store: ReturnType<typeof initStore>;
 };
 
 export interface RouteConfigComponentProps<
@@ -17,13 +18,10 @@ export interface RouteConfigComponentProps<
   route?: RouteConfig;
 }
 
-export type ServerFetchFunc = (
-  route: RouteDetail,
-  store: ReturnType<typeof initStore>
-) => Promise<void>;
+export type DataFetchFunc = (ctx: PageContext) => Promise<void>;
 
 export interface RouteConfigProperties {
-  serverFetch?: ServerFetchFunc;
+  fetchData?: DataFetchFunc;
 }
 
 export interface RouteConfig {

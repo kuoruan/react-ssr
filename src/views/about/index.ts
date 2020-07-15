@@ -9,7 +9,7 @@ const component = loadable(() =>
 
 const About: typeof component & RouteConfigProperties = component;
 
-About.serverFetch = function (_, store) {
+About.fetchData = function ({ store }) {
   return store.dispatch<any>(fetchUserInfo());
 };
 
