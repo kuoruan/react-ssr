@@ -16,6 +16,14 @@ module.exports = merge(webpackCommon, {
     filename: "[name].js",
     libraryTarget: "commonjs2",
   },
+  module: {
+    rules: [
+      {
+        test: /\.s?[ac]ss$/,
+        use: "null-loader", // ignore css files
+      },
+    ],
+  },
   plugins: [
     new CleanWebpackPlugin(),
     new Webpack.DefinePlugin({

@@ -20,14 +20,6 @@ module.exports = merge(webpackBase, webpackDev, {
   output: {
     chunkFilename: path.join(assetsDir, "js", "[name].chunk.js"),
   },
-  module: {
-    rules: [
-      {
-        test: /\.s?[ac]ss$/,
-        use: "null-loader", // ignore css files in dev, insert styles with client style-loader
-      },
-    ],
-  },
   externals: [
     NodeExternals({
       allowlist: ["webpack/hot/signal"],

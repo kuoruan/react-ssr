@@ -15,6 +15,7 @@ import routes from "@/routes";
 import { matchRoutes } from "@/routes/utils";
 import initStore from "@/store";
 
+import serveGzipped from "./gzip";
 import Html from "./Html";
 
 interface ServerRouterContext extends StaticContext {
@@ -23,9 +24,14 @@ interface ServerRouterContext extends StaticContext {
 
 const { clientDir, statsFilename } = require("#/config/conf");
 
+const staticBasePath = path.resolve(__dirname, `../${clientDir}`);
+
 const app = Express();
 
-app.use(Express.static(path.resolve(__dirname, `../${clientDir}`)));
+app.get("*.js", serveGzipped(staticBasePath, "text/javascript"));
+app.get("*.css", serveGzipped(staticBasePath, "text/css"));
+
+app.use(Express.static(staticBasePath));
 
 if (process.env.NODE_ENV === "development") {
   // add error handler
@@ -62,10 +68,6 @@ const clientStats = path.resolve(__dirname, `../${clientDir}/${statsFilename}`);
 
 app.get("*", async (req, res, next) => {
   const url = req.url;
-
-  if (process.env.NODE_ENV !== "production") {
-    console.log("Request from client", url);
-  }
 
   const history = configureHistory(url);
   const store = initStore(history);

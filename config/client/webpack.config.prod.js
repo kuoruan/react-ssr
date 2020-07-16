@@ -1,5 +1,6 @@
 const path = require("path");
 
+const CompressionPlugin = require("compression-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { merge } = require("webpack-merge");
@@ -53,6 +54,14 @@ module.exports = merge(webpackBase, webpackProd, {
     new BundleAnalyzerPlugin({
       analyzerMode: "disabled",
       generateStatsFile: true,
+    }),
+    new CompressionPlugin({
+      algorithm: "gzip",
+      filename: "[path].gz[query]",
+      cache: true,
+      test: /\.(js|css)$/,
+      minRatio: 0.8,
+      threshold: 8192,
     }),
   ],
 });
