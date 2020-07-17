@@ -12,7 +12,9 @@
     "build:server": "webpack --env.server",
     "serve": "webpack --watch --env.dev --env.server",
     "start": "node ./dist/server/server.js --port 8002",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint '**/*.{js,jsx,ts,tsx}' --quiet --fix",
+    "lint:style": "stylelint '**/*.{scss,less,css}' --quiet --fix"
   },
   "dependencies": {
     "@babel/runtime": "^7.10.5",
