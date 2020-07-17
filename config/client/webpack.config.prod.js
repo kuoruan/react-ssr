@@ -54,6 +54,7 @@ module.exports = merge(webpackBase, webpackProd, {
     new BundleAnalyzerPlugin({
       analyzerMode: "disabled",
       generateStatsFile: true,
+      statsFilename: "stats.json",
     }),
     new CompressionPlugin({
       algorithm: "gzip",

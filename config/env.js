@@ -3,7 +3,7 @@ const path = require("path");
 
 const DotEnv = require("dotenv");
 
-const { rootPath } = require("./conf");
+const { rootPath, publicPath } = require("./conf");
 
 if (!process.env.NODE_ENV) {
   throw new Error(
@@ -40,6 +40,7 @@ const raw = Object.keys(process.env)
     {
       NODE_ENV: process.env.NODE_ENV,
       MODE: runMode,
+      PUBLIC_URL: publicPath.slice(0, -1),
       PACKAGE_BUILD_TIME: new Date().toLocaleString(),
     }
   );

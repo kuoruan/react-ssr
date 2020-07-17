@@ -9,6 +9,7 @@ import { Provider as ReduxProvider } from "react-redux";
 import configureHistory from "@/configure/history";
 import routes from "@/routes";
 import { matchRoutes } from "@/routes/utils";
+import * as serviceWorker from "@/serviceWorker";
 import initStore from "@/store";
 
 import App from "./App";
@@ -61,3 +62,5 @@ loadableReady(() => {
     console.info("✅ Client-side HMR Enabled!");
   }
 });
+
+serviceWorker.register();

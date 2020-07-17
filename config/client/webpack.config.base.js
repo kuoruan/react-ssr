@@ -6,6 +6,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const Webpack = require("webpack");
 const { merge } = require("webpack-merge");
+const WorkboxPlugin = require("workbox-webpack-plugin");
 
 const {
   clientDir,
@@ -64,6 +65,19 @@ module.exports = merge(webpackCommon, {
       patterns: [path.join(rootPath, "public")],
     }),
     new CleanWebpackPlugin(),
+    new WorkboxPlugin.GenerateSW({
+      swDest: "sw.js",
+      sourcemap: false,
+      exclude: [/\.map$/, /.gz$/, new RegExp(statsFilename)],
+      navigateFallback: `${raw.PUBLIC_URL}/index.html`,
+      navigateFallbackDenylist: [
+        // Exclude URLs starting with /_, as they're likely an API call
+        new RegExp("^/_"),
+        // Exclude URLs containing a dot, as they're likely a resource in
+        // public/ and not a SPA route
+        new RegExp("/[^/]+\\.[^/]+$"),
+      ],
+    }),
   ],
   node: {
     // prevent webpack from injecting mocks to Node native modules
