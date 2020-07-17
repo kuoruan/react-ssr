@@ -7,10 +7,12 @@ import PrivateRoute from "./PrivateRoute";
 
 interface RoutesSwitchProps extends SwitchProps {
   routes?: RouteConfig[];
+  defaultRedirectPath: string;
 }
 
 const RoutesSwitch: FC<RoutesSwitchProps> = function ({
   routes,
+  defaultRedirectPath,
   ...restProps
 }: RoutesSwitchProps) {
   if (!routes || routes.length <= 0) {
@@ -23,7 +25,7 @@ const RoutesSwitch: FC<RoutesSwitchProps> = function ({
         route.requiresAuth ? (
           <PrivateRoute
             key={i}
-            redirectPath={route.redirectPath ?? "/login"}
+            redirectPath={route.redirectPath ?? defaultRedirectPath}
             path={route.path}
             exact={route.exact}
             strict={route.strict}

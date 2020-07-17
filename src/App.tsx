@@ -13,7 +13,7 @@ const App: FC<AppProps> = function (props: AppProps) {
       <Helmet>
         <title>React.js Server Side Render.</title>
       </Helmet>
-      <RoutesSwitch routes={routes} />
+      <RoutesSwitch routes={routes} defaultRedirectPath="/login" />
     </>
   );
 };
