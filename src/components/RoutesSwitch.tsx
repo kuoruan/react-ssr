@@ -7,12 +7,12 @@ import PrivateRoute from "./PrivateRoute";
 
 interface RoutesSwitchProps extends SwitchProps {
   routes?: RouteConfig[];
-  defaultRedirectPath: string;
+  defaultRedirectPath?: string;
 }
 
 const RoutesSwitch: FC<RoutesSwitchProps> = function ({
   routes,
-  defaultRedirectPath,
+  defaultRedirectPath = "/login",
   ...restProps
 }: RoutesSwitchProps) {
   if (!routes || routes.length <= 0) {
