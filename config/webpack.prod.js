@@ -11,20 +11,11 @@ module.exports = {
     minimizer: [
       new TerserPlugin({
         terserOptions: {
-          compress: {
-            ecma: 5,
-            warnings: false,
-            comparisons: false,
-            inline: 2,
-          },
-          mangle: {
-            safari10: true,
-          },
+          compress: true,
+          mangle: true,
           output: {
-            ecma: 5,
             preamble: `// Copyright 2019-${new Date().getFullYear()} XXX. All Rights Reserved.`,
             comments: /@license/i,
-            ascii_only: true,
           },
         },
         extractComments: false,
