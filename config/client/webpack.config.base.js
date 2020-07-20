@@ -61,7 +61,13 @@ module.exports = merge(webpackCommon, {
     }),
     new LoadablePlugin({ filename: statsFilename }),
     new CopyPlugin({
-      patterns: [path.join(rootPath, "public")],
+      patterns: [
+        {
+          from: "**/*",
+          context: path.join(rootPath, "public"),
+          noErrorOnMissing: true,
+        },
+      ],
     }),
     new CleanWebpackPlugin(),
   ],
