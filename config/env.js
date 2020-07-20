@@ -38,10 +38,10 @@ const raw = Object.keys(process.env)
       return env;
     },
     {
-      NODE_ENV: process.env.NODE_ENV,
       MODE: runMode,
-      PUBLIC_URL: publicPath.slice(0, -1),
+      NODE_ENV: process.env.NODE_ENV,
       PACKAGE_BUILD_TIME: new Date().toLocaleString(),
+      PUBLIC_URL: publicPath.replace(/\/$/, ""),
     }
   );
 
