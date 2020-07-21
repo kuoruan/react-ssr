@@ -19,6 +19,7 @@ module.exports = (api) => {
           useBuiltIns: web ? "usage" : undefined,
           corejs: web ? 3 : false,
           targets: node ? { node: "current" } : undefined,
+          ignoreBrowserslistConfig: node,
         },
       ],
       "@babel/preset-typescript",
