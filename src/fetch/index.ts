@@ -61,16 +61,18 @@ export function requestData<T = any>(
       } else {
         // handle response error
         return res.text().then((text) => {
-          let message, resObj;
+          let resObj;
           try {
             resObj = JSON.parse(text);
-            message = resObj.message;
           } catch {
-            message = text;
             resObj = text;
           }
 
-          throw new HttpError(status, message, resObj);
+          throw new HttpError(
+            status,
+            typeof resObj !== "string" ? resObj.message : undefined,
+            resObj
+          );
         });
       }
     })
