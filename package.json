@@ -23,7 +23,7 @@
     "connected-react-router": "^6.8.0",
     "core-js": "^3.6.5",
     "dateformat": "^3.0.3",
-    "history": "4.10.1",
+    "history": "5.0.0",
     "minimist": "^1.2.5",
     "node-fetch": "^2.6.0",
     "portfinder": "^1.0.27",
