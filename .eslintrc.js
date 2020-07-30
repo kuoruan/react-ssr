@@ -31,6 +31,7 @@ module.exports = {
           "internal",
           ["parent", "sibling"],
           "index",
+          "object",
           "unknown",
         ],
         alphabetize: { order: "asc", caseInsensitive: true },
@@ -49,11 +50,6 @@ module.exports = {
     react: {
       version: "detect",
     },
-    "import/resolver": [
-      "node",
-      {
-        typescript: {},
-      },
-    ],
+    "import/resolver": ["node", "typescript"],
   },
 };
