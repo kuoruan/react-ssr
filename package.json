@@ -114,7 +114,7 @@
     "stylelint-order": "^4.1.0",
     "stylelint-prettier": "^1.1.2",
     "stylelint-webpack-plugin": "^2.1.0",
-    "tailwindcss": "^1.6.1",
+    "tailwindcss": "^1.6.2",
     "terser-webpack-plugin": "^3.0.8",
     "ts-jest": "^26.1.4",
     "typescript": "^3.9.7",
