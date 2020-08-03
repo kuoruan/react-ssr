@@ -8,7 +8,7 @@ import {
 
 export function requestData<T = any>(
   url = "",
-  options?: RequestInit,
+  options?: RequestInit | string,
   body?: object
 ): Promise<T> {
   if (typeof options === "undefined") {
@@ -77,8 +77,8 @@ export function requestData<T = any>(
       }
     })
     .then((res) => {
-      let contentType = res.headers.get(HEADER_CONTENT_TYPE);
-      if (contentType) {
+      let contentType;
+      if ((contentType = res.headers.get(HEADER_CONTENT_TYPE))) {
         // handle respose ContentType like 'application/json; charset=utf-8'
         contentType = contentType.split(";").shift() || "";
       }
