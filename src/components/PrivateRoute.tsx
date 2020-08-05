@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { useSelector } from "react-redux";
 import { Route, RouteProps, Redirect } from "react-router-dom";
 
-import { isLoggedIn } from "@/store/selectors";
+import { isLoggedIn } from "@/store/system/selectors";
 
 interface PrivateRouteProps extends RouteProps {
   redirectPath: string;
