@@ -17,7 +17,7 @@
     "lint:style": "stylelint '**/*.{scss,less,css}' --quiet --fix"
   },
   "dependencies": {
-    "@babel/runtime": "^7.11.1",
+    "@babel/runtime": "^7.11.2",
     "@loadable/component": "^5.13.1",
     "@loadable/server": "^5.13.1",
     "connected-react-router": "^6.8.0",
