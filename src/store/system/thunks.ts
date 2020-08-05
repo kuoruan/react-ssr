@@ -5,9 +5,7 @@ export function fetchUserInfo(): ThunkResult<Promise<void>> {
   return (dispatch) => {
     return new Promise<void>(function (resolve) {
       setTimeout(function () {
-        dispatch(
-          updateSession({ loggedIn: true, session: "SSS", userName: "AAA" })
-        );
+        dispatch(updateSession({ loggedIn: true, userName: "AAA" }));
         resolve();
       }, 1000);
     });

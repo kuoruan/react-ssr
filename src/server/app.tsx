@@ -1,7 +1,10 @@
 import path from "path";
 
 import { ChunkExtractor, ChunkExtractorManager } from "@loadable/server";
+import cookieParser from "cookie-parser";
+import csurf from "csurf";
 import Express from "express";
+import { createProxyMiddleware } from "http-proxy-middleware";
 import React from "react";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
 import Helmet from "react-helmet";
@@ -9,6 +12,7 @@ import { Provider as ReduxProvider } from "react-redux";
 import { StaticContext } from "react-router";
 import { StaticRouter } from "react-router-dom";
 
+import Api from "@/api";
 import App from "@/App";
 import configureHistory from "@/configure/history";
 import routes from "@/routes";
@@ -25,6 +29,8 @@ interface ServerRouterContext extends StaticContext {
 const { clientDir, statsFilename } = require("#/config/conf");
 
 const staticBasePath = path.resolve(__dirname, `../${clientDir}`);
+
+const clientStats = path.resolve(__dirname, `../${clientDir}/${statsFilename}`);
 
 const app = Express();
 
@@ -64,13 +70,103 @@ if (process.env.NODE_ENV === "development") {
   );
 }
 
-const clientStats = path.resolve(__dirname, `../${clientDir}/${statsFilename}`);
+// add csurf middleware to avoid CSRF attack
+app.use(cookieParser());
+app.use(
+  csurf({
+    cookie: {
+      key: "_csrf",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    },
+    value: (req) => String(req.headers["X-CSRF-Token"]),
+  })
+);
+
+app.use(
+  (
+    err: any,
+    req: Express.Request,
+    res: Express.Response,
+    next: Express.NextFunction
+  ) => {
+    if (err.code !== "EBADCSRFTOKEN") {
+      return next(err);
+    }
+
+    res.status(403);
+    res.json({ code: -1, message: "invalid csrf token" });
+  }
+);
+
+const COOKIE_TOKEN_KEY = "_token";
+
+// add a filter proxy to all api
+app.use(
+  "/api",
+  createProxyMiddleware({
+    target: process.env.APP_API_PROXY_TARGET,
+    pathRewrite: {
+      "^/api": process.env.APP_API_BASE_SERVER ?? "",
+    },
+    selfHandleResponse: true,
+    onError: (err, req, res) => {
+      res.status(500);
+      res.json({ code: -1, message: "internal server error" });
+    },
+    onProxyReq: (proxyReq, req, res) => {
+      let token;
+      // get the access token from cookie and add it to the request header
+      if ((token = req.cookies[COOKIE_TOKEN_KEY])) {
+        proxyReq.setHeader("Authorization", `Bearer ${token}`);
+      }
+    },
+    onProxyRes: (proxyRes, req, res) => {
+      // extract JWT access token from login api response
+      if (
+        req.path === process.env.APP_API_LOGIN_PATH &&
+        proxyRes.statusCode === 200
+      ) {
+        let originalBody = Buffer.from("", "utf-8");
+
+        proxyRes.on("data", function (data) {
+          originalBody = Buffer.concat([originalBody, data]);
+        });
+
+        proxyRes.on("end", function () {
+          const body = originalBody.toString();
+
+          const json = JSON.parse(body);
+
+          // set the token cookie to client
+          // use httpOnly to disallow javascript access to the token
+          res.cookie(COOKIE_TOKEN_KEY, json.access_token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+          });
+
+          proxyRes.pipe(res);
+        });
+      } else {
+        proxyRes.pipe(res);
+      }
+    },
+  })
+);
 
 app.get("*", async (req, res, next) => {
   const url = req.url;
 
+  const token = req.cookies[COOKIE_TOKEN_KEY];
+
+  // create api object for server
+  const api = new Api(
+    `${process.env.APP_API_PROXY_TARGET}${process.env.APP_API_BASE_SERVER}`,
+    token
+  );
+
   const history = configureHistory(url);
-  const store = initStore(history);
+  const store = initStore(history, api, { system: { csrf: req.csrfToken() } });
 
   const branch = matchRoutes(routes, req.path);
 

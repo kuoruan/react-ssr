@@ -6,7 +6,7 @@ import {
   HEADER_CONTENT_TYPE,
 } from "./types";
 
-export function requestData<T = any>(
+export function request<T = any>(
   url = "",
   options?: RequestInit | string,
   body?: object
@@ -96,6 +96,49 @@ export function requestData<T = any>(
         }
       }
     });
+}
+
+export function GET<T = any>(
+  url: string,
+  options: RequestInit = {}
+): Promise<T> {
+  return request<T>(url, Object.assign({}, options, { method: "GET" }));
+}
+
+export function POST<T = any>(
+  url: string,
+  data: object,
+  options: RequestInit = {}
+): Promise<T> {
+  return request<T>(url, Object.assign({}, options, { method: "POST" }), data);
+}
+
+export function PUT<T = any>(
+  url: string,
+  data: object,
+  options: RequestInit = {}
+): Promise<T> {
+  return request<T>(url, Object.assign({}, options, { method: "PUT" }), data);
+}
+
+export function PATCH<T = any>(
+  url: string,
+  data: object,
+  options: RequestInit = {}
+): Promise<T> {
+  return request<T>(url, Object.assign({}, options, { method: "PATCH" }), data);
+}
+
+export function DELETE<T = any>(
+  url: string,
+  data: object,
+  options: RequestInit = {}
+): Promise<T> {
+  return request<T>(
+    url,
+    Object.assign({}, options, { method: "DELETE" }),
+    data
+  );
 }
 
 export * from "./types";

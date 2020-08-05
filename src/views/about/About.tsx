@@ -4,7 +4,7 @@ import { useRouteMatch, Link } from "react-router-dom";
 
 import RoutesSwitch from "@/components/RoutesSwitch";
 import { RouteConfigComponentProps } from "@/routes/types";
-import { getUsername } from "@/store/selectors";
+import { getUsername } from "@/store/system/selectors";
 
 interface AboutProps
   extends HTMLProps<HTMLDivElement>,

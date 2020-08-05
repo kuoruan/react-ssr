@@ -2,7 +2,7 @@ import { SystemState, SystemActionTypes, UPDATE_SESSION } from "./types";
 
 const initialState: SystemState = {
   loggedIn: false,
-  session: "",
+  csrf: "",
   userName: "",
 };
 
