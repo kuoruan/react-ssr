@@ -1,7 +1,9 @@
 import React, { FC } from "react";
+import { useSelector } from "react-redux";
 import { SwitchProps, Switch, Route } from "react-router-dom";
 
 import { RouteConfig } from "@/routes/types";
+import { isLoggedIn } from "@/store/system/selectors";
 
 import PrivateRoute from "./PrivateRoute";
 
@@ -15,6 +17,8 @@ const RoutesSwitch: FC<RoutesSwitchProps> = function ({
   defaultRedirectPath = "/login",
   ...restProps
 }: RoutesSwitchProps) {
+  const loggedIn = useSelector(isLoggedIn);
+
   if (!routes || routes.length <= 0) {
     return null;
   }
@@ -25,6 +29,7 @@ const RoutesSwitch: FC<RoutesSwitchProps> = function ({
         route.requiresAuth ? (
           <PrivateRoute
             key={i}
+            authenticated={loggedIn}
             redirectPath={route.redirectPath ?? defaultRedirectPath}
             path={route.path}
             exact={route.exact}

@@ -1,27 +1,24 @@
 import React, { FC } from "react";
-import { useSelector } from "react-redux";
 import { Route, RouteProps, Redirect } from "react-router-dom";
 
-import { isLoggedIn } from "@/store/system/selectors";
-
 interface PrivateRouteProps extends RouteProps {
+  authenticated: boolean;
   redirectPath: string;
 }
 
 const PrivateRoute: FC<PrivateRouteProps> = function ({
+  authenticated,
   redirectPath,
   render,
   children,
   component: Component,
   ...restProps
 }: PrivateRouteProps) {
-  const loggedIn = useSelector(isLoggedIn);
-
   return (
     <Route
       {...restProps}
       render={(props) => {
-        if (loggedIn) {
+        if (authenticated) {
           if (render) {
             return render({ ...props });
           } else if (Component) {

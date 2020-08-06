@@ -6,22 +6,21 @@ import React from "react";
 import { hydrate } from "react-dom";
 import { Provider as ReduxProvider } from "react-redux";
 
-import Api from "@/api";
+import App from "@/App";
+import configureApi from "@/configure/api";
 import configureHistory from "@/configure/history";
 import routes from "@/routes";
 import { matchRoutes } from "@/routes/utils";
 import * as serviceWorker from "@/serviceWorker";
 import initStore from "@/store";
 
-import App from "./App";
-
 const preloadedState = window.__PRELOADED_STATE__;
 delete window.__PRELOADED_STATE__;
 
+// create api object for client
+const api = configureApi({ csrfToken: preloadedState.system?.csrf });
 const history = configureHistory();
 
-// create api object for client
-const api = new Api("/api", "", preloadedState.system?.csrf);
 const store = initStore(history, api, preloadedState);
 
 history.listen((loc) => {

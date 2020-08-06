@@ -12,15 +12,16 @@ import { Provider as ReduxProvider } from "react-redux";
 import { StaticContext } from "react-router";
 import { StaticRouter } from "react-router-dom";
 
-import Api from "@/api";
 import App from "@/App";
+import configureApi from "@/configure/api";
 import configureHistory from "@/configure/history";
 import routes from "@/routes";
 import { matchRoutes } from "@/routes/utils";
 import initStore from "@/store";
 
-import serveGzipped from "./gzip";
 import Html from "./Html";
+import { serveGzipped } from "./serve";
+import { COOKIE_ACCESS_TOKEN_KEY } from "./types";
 
 interface ServerRouterContext extends StaticContext {
   url?: string;
@@ -99,8 +100,6 @@ app.use(
   }
 );
 
-const COOKIE_TOKEN_KEY = "_token";
-
 // add a filter proxy to all api
 app.use(
   "/api",
@@ -117,7 +116,7 @@ app.use(
     onProxyReq: (proxyReq, req, res) => {
       let token;
       // get the access token from cookie and add it to the request header
-      if ((token = req.cookies[COOKIE_TOKEN_KEY])) {
+      if ((token = req.cookies[COOKIE_ACCESS_TOKEN_KEY])) {
         proxyReq.setHeader("Authorization", `Bearer ${token}`);
       }
     },
@@ -140,7 +139,7 @@ app.use(
 
           // set the token cookie to client
           // use httpOnly to disallow javascript access to the token
-          res.cookie(COOKIE_TOKEN_KEY, json.access_token, {
+          res.cookie(COOKIE_ACCESS_TOKEN_KEY, json.access_token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
           });
@@ -157,15 +156,12 @@ app.use(
 app.get("*", async (req, res, next) => {
   const url = req.url;
 
-  const token = req.cookies[COOKIE_TOKEN_KEY];
+  const accessToken = req.cookies[COOKIE_ACCESS_TOKEN_KEY];
 
   // create api object for server
-  const api = new Api(
-    `${process.env.APP_API_PROXY_TARGET}${process.env.APP_API_BASE_SERVER}`,
-    token
-  );
-
+  const api = configureApi({ accessToken: accessToken });
   const history = configureHistory(url);
+
   const store = initStore(history, api, { system: { csrf: req.csrfToken() } });
 
   const branch = matchRoutes(routes, req.path);

@@ -1,5 +1,6 @@
 import { request } from "@/http";
 
+import { Tokens } from "./types";
 import UserApi from "./User";
 
 export default class Api {
@@ -7,18 +8,14 @@ export default class Api {
 
   private baseHeaders: { [key: string]: string };
 
-  constructor(
-    protected baseURL: string,
-    protected accessToken: string = "",
-    protected csrfToken: string = ""
-  ) {
+  constructor(protected baseURL: string, protected tokens: Tokens) {
     const headers: { [key: string]: string } = {};
 
-    if (accessToken) {
-      headers["Authorization"] = `Bearer ${accessToken}`;
+    if (tokens.accessToken) {
+      headers["Authorization"] = `Bearer ${tokens.accessToken}`;
     }
-    if (csrfToken) {
-      headers["X-CSRF-Token"] = csrfToken;
+    if (tokens.csrfToken) {
+      headers["X-CSRF-Token"] = tokens.csrfToken;
     }
 
     this.baseHeaders = headers;
