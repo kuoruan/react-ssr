@@ -141,5 +141,3 @@ export function DELETE<T = any>(
     data
   );
 }
-
-export * from "./types";

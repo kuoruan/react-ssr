@@ -1,6 +1,7 @@
-export type ApiTokens = {
+export type ApiOptions = {
   accessToken?: string;
   csrfToken?: string;
+  preRequest?: (path: string) => Promise<void> | null;
 };
 
 export type Client = {

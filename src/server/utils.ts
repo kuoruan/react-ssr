@@ -1,6 +1,8 @@
 import Minimist from "minimist";
 import PortFinder from "portfinder";
 
+import { UserClaims } from "./types";
+
 export function parseArgs(initValue?: {
   [key: string]: number | boolean | string;
 }) {
@@ -26,4 +28,24 @@ export function getRunPort(
   }
 
   return PortFinder.getPortPromise({ port: portNumber });
+}
+
+export function extractJWTClaims(token: string): UserClaims | null {
+  let encodedClaims;
+  if (!(encodedClaims = token.split(".")[1])) {
+    return null;
+  }
+
+  encodedClaims = encodedClaims.replace("-", "+").replace("_", "/");
+
+  const buf = Buffer.from(encodedClaims, "base64");
+
+  let obj;
+  try {
+    obj = JSON.parse(buf.toString("utf-8"));
+  } catch {
+    obj = null;
+  }
+
+  return obj;
 }

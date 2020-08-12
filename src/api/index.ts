@@ -1,6 +1,7 @@
 import { request } from "@/http";
+import { HEADER_CSRF_TOKEN, HEADER_AUTHORIZATION } from "@/http/types";
 
-import { ApiTokens } from "./types";
+import { ApiOptions } from "./types";
 import UserApi from "./User";
 
 export default class Api {
@@ -8,83 +9,113 @@ export default class Api {
 
   private baseHeaders: { [key: string]: string };
 
-  constructor(protected baseURL: string, protected tokens: ApiTokens) {
+  private preRequest?: (path: string) => Promise<void> | null;
+
+  private requestWait?: Promise<void> | null;
+
+  constructor(protected baseURL: string, protected options: ApiOptions) {
     const headers: { [key: string]: string } = {};
 
-    if (tokens.accessToken) {
-      headers["Authorization"] = `Bearer ${tokens.accessToken}`;
+    if (options.accessToken) {
+      headers[HEADER_AUTHORIZATION] = `Bearer ${options.accessToken}`;
     }
-    if (tokens.csrfToken) {
-      headers["X-CSRF-Token"] = tokens.csrfToken;
+    if (options.csrfToken) {
+      headers[HEADER_CSRF_TOKEN] = options.csrfToken;
     }
 
     this.baseHeaders = headers;
 
+    this.preRequest = options.preRequest;
+
     this.user = new UserApi(this);
   }
 
-  public GET<T = any>(url: string, options: RequestInit = {}): Promise<T> {
+  public GET<T = any>(path: string, options: RequestInit = {}): Promise<T> {
     const headers = Object.assign({}, this.baseHeaders, options.headers);
 
-    return request<T>(
-      `${this.baseURL}/${url}`,
+    return this.checkAndRequest(
+      path,
       Object.assign({}, options, { method: "GET", headers: headers })
     );
   }
 
   public POST<T = any>(
-    url: string,
+    path: string,
     data: object,
     options: RequestInit = {}
   ): Promise<T> {
     const headers = Object.assign({}, this.baseHeaders, options.headers);
 
-    return request<T>(
-      `${this.baseURL}/${url}`,
+    return this.checkAndRequest(
+      path,
       Object.assign({}, options, { method: "POST", headers: headers }),
       data
     );
   }
 
   public PATCH<T = any>(
-    url: string,
+    path: string,
     data: object,
     options: RequestInit = {}
   ): Promise<T> {
     const headers = Object.assign({}, this.baseHeaders, options.headers);
 
-    return request<T>(
-      `${this.baseURL}/${url}`,
+    return this.checkAndRequest(
+      path,
       Object.assign({}, options, { method: "PATCH", headers: headers }),
       data
     );
   }
 
   public PUT<T = any>(
-    url: string,
+    path: string,
     data: object,
     options: RequestInit = {}
   ): Promise<T> {
     const headers = Object.assign({}, this.baseHeaders, options.headers);
 
-    return request<T>(
-      `${this.baseURL}/${url}`,
+    return this.checkAndRequest(
+      path,
       Object.assign({}, options, { method: "PUT", headers: headers }),
       data
     );
   }
 
   public DELETE<T = any>(
-    url: string,
+    path: string,
     data: object,
     options: RequestInit = {}
   ): Promise<T> {
     const headers = Object.assign({}, this.baseHeaders, options.headers);
 
-    return request<T>(
-      `${this.baseURL}/${url}`,
+    return this.checkAndRequest(
+      path,
       Object.assign({}, options, { method: "DELETE", headers: headers }),
       data
     );
+  }
+
+  private async checkAndRequest<T>(
+    path = "",
+    options?: RequestInit | string,
+    body?: object
+  ): Promise<T> {
+    if (this.requestWait) {
+      try {
+        await this.requestWait;
+      } finally {
+        this.requestWait = null;
+      }
+    } else {
+      if (this.preRequest && (this.requestWait = this.preRequest(path))) {
+        try {
+          await this.requestWait;
+        } finally {
+          this.requestWait = null;
+        }
+      }
+    }
+
+    return request<T>(`${this.baseURL}/${path}`, options, body);
   }
 }
