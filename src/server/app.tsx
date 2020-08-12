@@ -108,6 +108,68 @@ app.use(
   }
 );
 
+// add api to get and set tokens
+app.post("/api/auth/check", async (req, res) => {
+  try {
+    const { access_token, refresh_token } = await http.POST<Tokens>(
+      `${process.env.APP_API_HOST}${process.env.APP_API_BASE_PATH}/token`,
+      req.body
+    );
+
+    res
+      .cookie(COOKIE_ACCESS_TOKEN_KEY, access_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      })
+      .cookie(COOKIE_REFRESH_TOKEN_KEY, refresh_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      })
+      .sendStatus(204);
+  } catch (e) {
+    if (e.code && typeof e.response === "object") {
+      res.status(e.code).json(e.response);
+    } else {
+      res.status(500).json({ code: -1, message: "internal server error" });
+    }
+  }
+});
+
+app.post("/api/auth/refresh", async (req, res) => {
+  let refreshToken: string;
+
+  if (!(refreshToken = req.cookies(COOKIE_REFRESH_TOKEN_KEY))) {
+    res.status(403).json({ code: -1, message: "empty refresh token" });
+    return;
+  }
+
+  try {
+    const { access_token, refresh_token } = await http.POST<Tokens>(
+      `${process.env.APP_API_HOST}${process.env.APP_API_BASE_PATH}/token:refresh`,
+      {
+        refresh_token: refreshToken,
+      }
+    );
+
+    res
+      .cookie(COOKIE_ACCESS_TOKEN_KEY, access_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      })
+      .cookie(COOKIE_REFRESH_TOKEN_KEY, refresh_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      })
+      .sendStatus(204);
+  } catch (e) {
+    if (e.code && typeof e.response === "object") {
+      res.status(e.code).json(e.response);
+    } else {
+      res.status(500).json({ code: -1, message: "internal server error" });
+    }
+  }
+});
+
 // add a filter proxy to all api
 app.use(
   "/api",
