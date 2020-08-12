@@ -1,10 +1,10 @@
 import Api from "@/api";
-import { Tokens } from "@/api/types";
+import { ApiTokens } from "@/api/types";
 
-export default function configureApi(tokens: Tokens): Api {
+export default function configureApi(tokens: ApiTokens): Api {
   const baseURL = __isClient__
     ? "/api"
-    : `${process.env.APP_API_PROXY_TARGET}${process.env.APP_API_BASE_SERVER}`;
+    : `${process.env.APP_API_HOST}${process.env.APP_API_BASE_PATH}`;
 
   return new Api(baseURL, tokens);
 }

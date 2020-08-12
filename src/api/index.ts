@@ -1,6 +1,6 @@
 import { request } from "@/http";
 
-import { Tokens } from "./types";
+import { ApiTokens } from "./types";
 import UserApi from "./User";
 
 export default class Api {
@@ -8,7 +8,7 @@ export default class Api {
 
   private baseHeaders: { [key: string]: string };
 
-  constructor(protected baseURL: string, protected tokens: Tokens) {
+  constructor(protected baseURL: string, protected tokens: ApiTokens) {
     const headers: { [key: string]: string } = {};
 
     if (tokens.accessToken) {

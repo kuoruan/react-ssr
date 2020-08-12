@@ -4,6 +4,7 @@ import {
   CONTENT_TYPE_TEXT,
   CONTENT_TYPE_STREAM,
   HEADER_CONTENT_TYPE,
+  ErrorResponse,
 } from "./types";
 
 export function request<T = any>(
@@ -61,7 +62,7 @@ export function request<T = any>(
       } else {
         // handle response error
         return res.text().then((text) => {
-          let resObj;
+          let resObj: ErrorResponse | string;
           try {
             resObj = JSON.parse(text);
           } catch {

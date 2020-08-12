@@ -15,13 +15,21 @@ import { StaticRouter } from "react-router-dom";
 import App from "@/App";
 import configureApi from "@/configure/api";
 import configureHistory from "@/configure/history";
+import * as http from "@/http";
 import routes from "@/routes";
 import { matchRoutes } from "@/routes/utils";
 import initStore from "@/store";
 
 import Html from "./Html";
 import { serveGzipped } from "./serve";
-import { COOKIE_ACCESS_TOKEN_KEY } from "./types";
+import {
+  COOKIE_ACCESS_TOKEN_KEY,
+  COOKIE_REQUEST_ID_KEY,
+  COOKIE_REFRESH_TOKEN_KEY,
+  Tokens,
+  HEADER_AUTHORIZATION,
+  HEADER_REQUEST_ID,
+} from "./types";
 
 interface ServerRouterContext extends StaticContext {
   url?: string;
@@ -92,11 +100,11 @@ app.use(
     next: Express.NextFunction
   ) => {
     if (err.code !== "EBADCSRFTOKEN") {
-      return next(err);
+      next(err);
+      return;
     }
 
-    res.status(403);
-    res.json({ code: -1, message: "invalid csrf token" });
+    res.status(403).json({ code: -1, message: "invalid csrf token" });
   }
 );
 
@@ -104,56 +112,40 @@ app.use(
 app.use(
   "/api",
   createProxyMiddleware({
-    target: process.env.APP_API_PROXY_TARGET,
+    target: process.env.APP_API_HOST,
     pathRewrite: {
-      "^/api": process.env.APP_API_BASE_SERVER ?? "",
+      "^/api": process.env.APP_API_BASE_PATH!,
     },
-    selfHandleResponse: true,
     onError: (err, req, res) => {
-      res.status(500);
-      res.json({ code: -1, message: "internal server error" });
+      res.status(500).json({ code: -1, message: "internal server error" });
     },
     onProxyReq: (proxyReq, req, res) => {
-      let token;
+      let token, requestId: string;
       // get the access token from cookie and add it to the request header
       if ((token = req.cookies[COOKIE_ACCESS_TOKEN_KEY])) {
-        proxyReq.setHeader("Authorization", `Bearer ${token}`);
+        proxyReq.setHeader(HEADER_AUTHORIZATION, `Bearer ${token}`);
+      }
+
+      if ((requestId = req.cookies[COOKIE_REQUEST_ID_KEY])) {
+        proxyReq.setHeader(HEADER_REQUEST_ID, requestId);
       }
     },
+    selfHandleResponse: true,
     onProxyRes: (proxyRes, req, res) => {
-      // extract JWT access token from login api response
       if (
-        req.path === process.env.APP_API_LOGIN_PATH &&
-        proxyRes.statusCode === 200
+        !req.cookies[COOKIE_REQUEST_ID_KEY] &&
+        res.hasHeader(HEADER_REQUEST_ID)
       ) {
-        let originalBody = Buffer.from("", "utf-8");
-
-        proxyRes.on("data", function (data) {
-          originalBody = Buffer.concat([originalBody, data]);
-        });
-
-        proxyRes.on("end", function () {
-          const body = originalBody.toString();
-
-          const json = JSON.parse(body);
-
-          // set the token cookie to client
-          // use httpOnly to disallow javascript access to the token
-          res.cookie(COOKIE_ACCESS_TOKEN_KEY, json.access_token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-          });
-
-          proxyRes.pipe(res);
-        });
-      } else {
-        proxyRes.pipe(res);
+        res.cookie(COOKIE_REQUEST_ID_KEY, res.getHeader(HEADER_REQUEST_ID));
+        res.removeHeader(HEADER_REQUEST_ID);
       }
+
+      proxyRes.pipe(res);
     },
   })
 );
 
-app.get("*", async (req, res, next) => {
+app.get("*", async (req, res) => {
   const url = req.url;
 
   const accessToken = req.cookies[COOKIE_ACCESS_TOKEN_KEY];
@@ -197,45 +189,43 @@ app.get("*", async (req, res, next) => {
   );
 
   if (context.statusCode && context.url) {
-    return res.redirect(context.statusCode, context.url);
-  } else {
-    const linkElements = clientExtractor.getLinkElements();
-    const styleElements = clientExtractor.getStyleElements();
-    const scriptElements = clientExtractor.getScriptElements();
-
-    const helmet = Helmet.renderStatic();
-    const htmlAttributes = helmet.htmlAttributes.toComponent();
-    const bodyAttributes = helmet.bodyAttributes.toComponent();
-    const titleComponent = helmet.title.toComponent();
-    const metaComponent = helmet.meta.toComponent();
-    const linkComponent = helmet.link.toComponent();
-
-    const preloadedState = store.getState();
-
-    const html = renderToStaticMarkup(
-      <Html
-        htmlAttributes={htmlAttributes}
-        bodyAttributes={bodyAttributes}
-        titleNode={titleComponent}
-        metaNode={metaComponent}
-        linkNodes={[linkComponent, ...linkElements]}
-        styleNodes={styleElements}
-        scriptNodes={scriptElements}
-        content={markup}
-        preloadedState={preloadedState}
-      />
-    );
-
-    if (context.statusCode) {
-      res.status(context.statusCode);
-    } else {
-      res.status(200);
-    }
-    res.set("Content-Type", "text/html");
-    res.send(`<!DOCTYPE html>${html}`);
+    res.redirect(context.statusCode, context.url);
+    return;
   }
 
-  return next();
+  const linkElements = clientExtractor.getLinkElements();
+  const styleElements = clientExtractor.getStyleElements();
+  const scriptElements = clientExtractor.getScriptElements();
+
+  const helmet = Helmet.renderStatic();
+  const htmlAttributes = helmet.htmlAttributes.toComponent();
+  const bodyAttributes = helmet.bodyAttributes.toComponent();
+  const titleComponent = helmet.title.toComponent();
+  const metaComponent = helmet.meta.toComponent();
+  const linkComponent = helmet.link.toComponent();
+
+  const preloadedState = store.getState();
+
+  const html = renderToStaticMarkup(
+    <Html
+      htmlAttributes={htmlAttributes}
+      bodyAttributes={bodyAttributes}
+      titleNode={titleComponent}
+      metaNode={metaComponent}
+      linkNodes={[linkComponent, ...linkElements]}
+      styleNodes={styleElements}
+      scriptNodes={scriptElements}
+      content={markup}
+      preloadedState={preloadedState}
+    />
+  );
+
+  if (context.statusCode) {
+    res.status(context.statusCode);
+  } else {
+    res.status(200);
+  }
+  res.set("Content-Type", "text/html").send(`<!DOCTYPE html>${html}`);
 });
 
 if (module.hot) {

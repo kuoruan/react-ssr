@@ -1,4 +1,4 @@
-export type Tokens = {
+export type ApiTokens = {
   accessToken?: string;
   csrfToken?: string;
 };
