@@ -106,7 +106,7 @@
     "null-loader": "^4.0.0",
     "postcss-flexbugs-fixes": "^4.2.1",
     "postcss-loader": "^3.0.0",
-    "prettier": "^2.0.5",
+    "prettier": "^2.1.0",
     "react-test-renderer": "^16.13.1",
     "sass": "^1.26.10",
     "sass-loader": "^9.0.3",
