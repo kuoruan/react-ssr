@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 interface TopicProps extends HTMLProps<HTMLDivElement> {}
 
 const Topic: FC<TopicProps> = function (props: TopicProps) {
-  let { topicId } = useParams();
+  let { topicId } = useParams<{ topicId: string }>();
   return <div>{topicId}</div>;
 };
 
