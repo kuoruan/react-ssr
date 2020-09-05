@@ -5616,10 +5616,10 @@ ini@^1.3.4, ini@^1.3.5:
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
   integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
 
-install-deps-postmerge@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/install-deps-postmerge/-/install-deps-postmerge-2.0.0.tgz#201dab05c96f29c144cbdd209e4399abbcbf4164"
-  integrity sha512-uYka3ac0SAzwf8saw0Ip7ZBMGZ6K3qwTygmXowX7BWnAGouUJVJqO1rMFl7ZNvt2Cwv+2C3sshJXE7X37OAC1w==
+install-deps-postmerge@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/install-deps-postmerge/-/install-deps-postmerge-2.0.1.tgz#154e94c97375cb15557df0226fb1496f41a07685"
+  integrity sha512-L2RM7W3dDo4DboV/ETA8KE/DQIdZMXFhzOO8CMJEZPPx73t/kyT7BqAaWDtTNY//8lb/F8TYkfdBmwRb3NFEiA==
   dependencies:
     execa "^4.0.3"
     yarn-or-npm "^3.0.1"
