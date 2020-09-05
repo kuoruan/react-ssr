@@ -29,7 +29,7 @@
     "history": "4.10.1",
     "http-proxy-middleware": "^1.0.5",
     "minimist": "^1.2.5",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "portfinder": "^1.0.28",
     "qs": "^6.9.4",
     "react": "^16.13.1",
