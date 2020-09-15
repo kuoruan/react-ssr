@@ -19,7 +19,7 @@
   "dependencies": {
     "@babel/runtime": "^7.11.2",
     "@loadable/component": "^5.13.1",
-    "@loadable/server": "^5.13.1",
+    "@loadable/server": "^5.13.2",
     "connected-react-router": "^6.8.0",
     "cookie-parser": "^1.4.5",
     "core-js": "^3.6.5",
