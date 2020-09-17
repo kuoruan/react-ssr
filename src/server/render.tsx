@@ -93,8 +93,8 @@ export default function render(statsFile: string): RequestHandler {
 
     const html = renderToStaticMarkup(
       <Html
-        htmlAttributes={htmlAttributes}
-        bodyAttributes={bodyAttributes}
+        {...htmlAttributes}
+        bodyProps={bodyAttributes}
         titleNode={titleComponent}
         metaNode={metaComponent}
         linkNodes={[linkComponent, ...linkElements]}

@@ -42,28 +42,14 @@ history.listen((loc) => {
 });
 
 loadableReady(() => {
-  const render = () => {
-    hydrate(
-      <ReduxProvider store={store}>
-        <ConnectedRouter history={history}>
-          <App />
-        </ConnectedRouter>
-      </ReduxProvider>,
-      document.getElementById("app")
-    );
-  };
-
-  render();
-
-  if (module.hot) {
-    module.hot.accept("./App", () => {
-      console.log("🔁 Client-side HMR Reloading...");
-
-      render();
-    });
-
-    console.info("✅ Client-side HMR Enabled!");
-  }
+  hydrate(
+    <ReduxProvider store={store}>
+      <ConnectedRouter history={history}>
+        <App />
+      </ConnectedRouter>
+    </ReduxProvider>,
+    document.getElementById("app")
+  );
 });
 
 serviceWorker.register();

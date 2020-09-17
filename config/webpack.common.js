@@ -1,6 +1,5 @@
 const path = require("path");
 
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const Webpack = require("webpack");
 
 const { assetsDir, rootPath } = require("./conf");
@@ -97,17 +96,7 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new Webpack.DefinePlugin(stringified),
-    new ForkTsCheckerWebpackPlugin({
-      typescript: {
-        diagnosticOptions: {
-          semantic: true,
-          syntactic: true,
-        },
-      },
-    }),
-  ],
+  plugins: [new Webpack.DefinePlugin(stringified)],
   stats: {
     cached: false,
     cachedAssets: false,

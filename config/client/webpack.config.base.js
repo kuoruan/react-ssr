@@ -3,6 +3,7 @@ const path = require("path");
 const LoadablePlugin = require("@loadable/webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const Webpack = require("webpack");
 const { merge } = require("webpack-merge");
@@ -37,6 +38,16 @@ module.exports = merge(webpackCommon, {
           "postcss-loader",
         ],
       },
+      // Do not transform vendor's CSS with CSS-modules
+      // The point is that they remain in global scope.
+      // Since we require these CSS files in our JS or CSS files,
+      // they will be a part of our compilation either way.
+      // So, no need for ExtractTextPlugin here.
+      {
+        test: /\.css$/,
+        include: /node_modules/,
+        use: ["style-loader", "css-loader"],
+      },
       {
         test: /\.s[ac]ss$/,
         exclude: /node_modules/,
@@ -70,6 +81,7 @@ module.exports = merge(webpackCommon, {
       ],
     }),
     new CleanWebpackPlugin(),
+    new ForkTsCheckerWebpackPlugin(),
   ],
   node: {
     // prevent webpack from injecting mocks to Node native modules

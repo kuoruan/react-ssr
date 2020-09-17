@@ -1,7 +1,8 @@
-export const HEADER_CONTENT_TYPE = "Content-Type";
 export const HEADER_AUTHORIZATION = "Authorization";
-export const HEADER_REQUEST_ID = "X-Request-Id";
+export const HEADER_CONTENT_LENGTH = "Content-Length";
+export const HEADER_CONTENT_TYPE = "Content-Type";
 export const HEADER_CSRF_TOKEN = "X-CSRF-Token";
+export const HEADER_REQUEST_ID = "X-Request-Id";
 
 export const CONTENT_TYPE_JSON = "application/json";
 export const CONTENT_TYPE_STREAM = "application/octet-stream";

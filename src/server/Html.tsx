@@ -1,37 +1,29 @@
-import React, {
-  FC,
-  HTMLProps,
-  HtmlHTMLAttributes,
-  HTMLAttributes,
-  ReactNode,
-} from "react";
+import React, { FC, HTMLProps, ReactNode } from "react";
 
 interface HtmlProps extends HTMLProps<HTMLHtmlElement> {
-  htmlAttributes: HtmlHTMLAttributes<HTMLHtmlElement>;
-  bodyAttributes: HTMLAttributes<HTMLBodyElement>;
-  titleNode: ReactNode;
-  metaNode: ReactNode;
-  linkNodes: ReactNode[];
-  styleNodes: ReactNode[];
-  scriptNodes: ReactNode[];
-  content: string;
-  preloadedState: any;
+  bodyProps?: HTMLProps<HTMLBodyElement>;
+  titleNode?: ReactNode;
+  metaNode?: ReactNode;
+  linkNodes?: ReactNode[];
+  styleNodes?: ReactNode[];
+  scriptNodes?: ReactNode[];
+  content?: string;
+  preloadedState?: object;
 }
 
 const Html: FC<HtmlProps> = function ({
-  htmlAttributes,
-  bodyAttributes,
-  titleNode,
+  bodyProps = {},
+  titleNode = <title>App</title>,
   metaNode,
-  linkNodes,
-  styleNodes,
-  scriptNodes,
-  content,
-  preloadedState,
+  linkNodes = [],
+  styleNodes = [],
+  scriptNodes = [],
+  content = "",
+  preloadedState = {},
   ...restProps
 }: HtmlProps) {
   return (
-    <html {...htmlAttributes} {...restProps}>
+    <html {...restProps}>
       <head>
         <meta charSet="utf-8" />
         <link
@@ -46,7 +38,7 @@ const Html: FC<HtmlProps> = function ({
         {linkNodes}
         {styleNodes}
       </head>
-      <body {...bodyAttributes}>
+      <body {...bodyProps}>
         <div id="app" dangerouslySetInnerHTML={{ __html: content }}></div>
         <script
           dangerouslySetInnerHTML={{

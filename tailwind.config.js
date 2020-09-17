@@ -11,4 +11,8 @@ module.exports = {
   corePlugins: {
     float: false,
   },
+  future: {
+    removeDeprecatedGapUtilities: true,
+    purgeLayersByDefault: true,
+  },
 };

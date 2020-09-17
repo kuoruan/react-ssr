@@ -7,8 +7,10 @@ function isNodeTarget(caller) {
 }
 
 module.exports = (api) => {
-  const web = api.caller(isWebTarget);
-  const node = api.caller(isNodeTarget);
+  const isDevelopment = api.env("development");
+
+  const isWeb = api.caller(isWebTarget);
+  const isNode = api.caller(isNodeTarget);
 
   return {
     presets: [
@@ -16,16 +18,23 @@ module.exports = (api) => {
         "@babel/preset-env",
         {
           modules: false,
-          useBuiltIns: web ? "usage" : undefined,
-          corejs: web ? 3 : false,
-          targets: node ? { node: "current" } : undefined,
-          ignoreBrowserslistConfig: node,
+          useBuiltIns: isWeb ? "usage" : undefined,
+          corejs: isWeb ? 3 : false,
+          targets: isNode ? { node: "current" } : undefined,
+          ignoreBrowserslistConfig: isNode,
         },
       ],
-      "@babel/preset-typescript",
+      [
+        "@babel/preset-typescript",
+        {
+          // for fork-ts-checker-webpack-plugin
+          onlyRemoveTypeImports: true,
+        },
+      ],
       "@babel/preset-react",
     ],
     plugins: [
+      isDevelopment && isWeb && "react-refresh/babel",
       "@loadable/babel-plugin",
       "@babel/plugin-proposal-class-properties",
       "@babel/plugin-proposal-object-rest-spread",
@@ -34,6 +43,6 @@ module.exports = (api) => {
       "@babel/plugin-proposal-async-generator-functions",
       "@babel/plugin-transform-runtime",
       "@babel/plugin-transform-typescript",
-    ],
+    ].filter(Boolean),
   };
 };

@@ -1,5 +1,6 @@
 import path from "path";
 
+import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import express from "express";
 
@@ -7,7 +8,8 @@ import {
   serveGzipped,
   proxyApi,
   checkAuthCode,
-  refreshToken,
+  autoRefreshToken,
+  revokeTokens,
   csrfProtection,
   csrfErrorHandler,
 } from "./handlers";
@@ -62,18 +64,25 @@ app.use(cookieParser());
 app.use(csrfProtection());
 app.use(csrfErrorHandler());
 
+const authRouter = express.Router();
+
 // add api to get and set tokens
-app.post(
-  "/api/auth/check",
+authRouter.post(
+  "/check",
+  bodyParser.json(),
   checkAuthCode(
-    `${process.env.APP_API_HOST}${process.env.APP_API_BASE_PATH}/token`
+    `${process.env.APP_API_HOST}${process.env.APP_API_BASE_PATH}/auth/token`
   )
 );
 
-app.post(
-  "/api/auth/refresh",
-  refreshToken(
-    `${process.env.APP_API_HOST}${process.env.APP_API_BASE_PATH}/token:refresh`
+authRouter.delete("/logout", revokeTokens());
+
+app.use("/api/auth", authRouter);
+
+// auto refresh token when needed
+app.use(
+  autoRefreshToken(
+    `${process.env.APP_API_HOST}${process.env.APP_API_BASE_PATH}/auth/token/refresh`
   )
 );
 

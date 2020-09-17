@@ -1,3 +1,5 @@
+import http, { RequestOptions } from "http";
+
 import Minimist from "minimist";
 import PortFinder from "portfinder";
 
@@ -48,4 +50,46 @@ export function extractJWTClaims(token: string): UserClaims | null {
   }
 
   return obj;
+}
+
+export function request<T>(options: RequestOptions, data?: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const req = http.request(options, (resp) => {
+      const statusCode = resp.statusCode || 0;
+
+      const chunks: Uint8Array[] = [];
+      resp.on("data", (chunk) => {
+        chunks.push(chunk);
+      });
+
+      resp.on("end", () => {
+        const body = Buffer.concat(chunks).toString("utf-8");
+
+        let response: any;
+        try {
+          response = JSON.parse(body);
+
+          if (statusCode < 200 || statusCode > 300) {
+            reject({
+              statusCode: statusCode,
+              response: response,
+            });
+          } else {
+            resolve(response);
+          }
+        } catch {
+          reject({ statusCode: statusCode, rawResponse: body });
+        }
+      });
+    });
+
+    req.on("error", (err) => {
+      reject(err);
+    });
+
+    if (data) {
+      req.write(data);
+    }
+    req.end();
+  });
 }

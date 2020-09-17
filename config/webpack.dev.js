@@ -15,10 +15,12 @@ module.exports = {
       },
     ],
   },
+  optimization: {
+    noEmitOnErrors: true,
+  },
   plugins: [
     new StylelintPlugin(),
     new Webpack.HotModuleReplacementPlugin(),
-    new Webpack.NoEmitOnErrorsPlugin(),
     new FriendlyErrorsWebpackPlugin(),
   ],
 };

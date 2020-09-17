@@ -31,15 +31,9 @@ module.exports = merge(webpackBase, webpackProd, {
           name: "react",
           priority: 10,
         },
-        vendors: {
-          test: /node_modules/,
-          priority: -10,
-          name: "vendors",
-        },
-        default: {
-          minChunks: 2,
-          priority: -20,
-          reuseExistingChunk: true,
+        redux: {
+          test: /[\\/]node_modules[\\/](redux|react-redux|redux-thunk)[\\/]/,
+          name: "redux",
         },
       },
     },
@@ -60,7 +54,7 @@ module.exports = merge(webpackBase, webpackProd, {
     }),
     new CompressionPlugin({
       algorithm: "gzip",
-      filename: "[path].gz[query]",
+      filename: "[path][base].gz[query]",
       cache: true,
       test: /\.(js|css)$/,
       minRatio: 0.8,

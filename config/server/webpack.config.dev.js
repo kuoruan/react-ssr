@@ -22,7 +22,9 @@ module.exports = merge(webpackBase, webpackDev, {
   },
   externals: [
     NodeExternals({
-      allowlist: ["webpack/hot/signal"],
+      // load non-javascript files with extensions
+      // https://github.com/liady/webpack-node-externals#how-can-i-bundle-required-assets-ie-css-files-from-node_modules
+      allowlist: ["webpack/hot/signal", /\.(?!(?:jsx?|json)$).{1,5}$/i],
     }),
   ],
   plugins: [

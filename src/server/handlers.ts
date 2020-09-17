@@ -1,14 +1,17 @@
 import fs from "fs";
+import url from "url";
 
 import csurf from "csurf";
 import { RequestHandler, ErrorRequestHandler } from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 
-import * as http from "@/http";
 import {
+  CONTENT_TYPE_JSON,
   HEADER_AUTHORIZATION,
-  HEADER_REQUEST_ID,
+  HEADER_CONTENT_LENGTH,
+  HEADER_CONTENT_TYPE,
   HEADER_CSRF_TOKEN,
+  HEADER_REQUEST_ID,
 } from "@/http/types";
 
 import {
@@ -16,7 +19,10 @@ import {
   COOKIE_ACCESS_TOKEN_KEY,
   COOKIE_REFRESH_TOKEN_KEY,
   Tokens,
+  READ_TIMEOUT,
+  PROXY_TIMEOUT,
 } from "./types";
+import { request, extractJWTClaims } from "./utils";
 
 export function serveGzipped(
   basePath: string,
@@ -48,18 +54,21 @@ export function csrfProtection(): RequestHandler {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
     },
-    value: (req) => String(req.headers[HEADER_CSRF_TOKEN]),
+    value: (req) => {
+      const otken = req.get(HEADER_CSRF_TOKEN) || "";
+      return otken;
+    },
   });
 }
 
 export function csrfErrorHandler(): ErrorRequestHandler {
   return (err, req, res, next) => {
-    if (err.code !== "EBADCSRFTOKEN") {
-      next(err);
+    if (err.code === "EBADCSRFTOKEN") {
+      res.status(403).json({ code: -1, message: "invalid csrf token" });
       return;
     }
 
-    res.status(403).json({ code: -1, message: "invalid csrf token" });
+    next(err);
   };
 }
 
@@ -70,6 +79,8 @@ export function proxyApi(
 ): RequestHandler {
   return createProxyMiddleware({
     target: targetHost,
+    timeout: READ_TIMEOUT,
+    proxyTimeout: PROXY_TIMEOUT,
     pathRewrite: (pahtname) => {
       return pahtname.replace(new RegExp(`^${basePath}`), proxyPath);
     },
@@ -87,29 +98,41 @@ export function proxyApi(
         proxyReq.setHeader(HEADER_REQUEST_ID, requestId);
       }
     },
-    selfHandleResponse: true,
     onProxyRes: (proxyRes, req, res) => {
+      let requestId;
       if (
         !req.cookies[COOKIE_REQUEST_ID_KEY] &&
-        res.hasHeader(HEADER_REQUEST_ID)
+        (requestId = proxyRes.headers["x-request-id"])
       ) {
-        res.cookie(COOKIE_REQUEST_ID_KEY, res.getHeader(HEADER_REQUEST_ID));
-        res.removeHeader(HEADER_REQUEST_ID);
+        res.cookie(COOKIE_REQUEST_ID_KEY, requestId);
       }
 
-      proxyRes.pipe(res);
+      delete proxyRes.headers["x-request-id"];
     },
   });
 }
 
-export function checkAuthCode(tokenApi: string): RequestHandler {
+export function checkAuthCode(authApi: string): RequestHandler {
+  const u = url.parse(authApi);
   return async (req, res) => {
-    try {
-      const { access_token, refresh_token } = await http.POST<Tokens>(
-        tokenApi,
-        req.body
-      );
+    const data = JSON.stringify(req.body);
 
+    try {
+      const { access_token, refresh_token } = await request<Tokens>(
+        {
+          method: "POST",
+          host: u.hostname,
+          path: u.path,
+          port: u.port,
+          timeout: READ_TIMEOUT,
+          headers: {
+            ...req.headers,
+            [HEADER_CONTENT_TYPE]: CONTENT_TYPE_JSON,
+            [HEADER_CONTENT_LENGTH]: data.length,
+          },
+        },
+        data
+      );
       res
         .cookie(COOKIE_ACCESS_TOKEN_KEY, access_token, {
           httpOnly: true,
@@ -121,8 +144,12 @@ export function checkAuthCode(tokenApi: string): RequestHandler {
         })
         .sendStatus(204);
     } catch (e) {
-      if (e.code && typeof e.response === "object") {
-        res.status(e.code).json(e.response);
+      if (e.statusCode) {
+        if (typeof e.response === "object") {
+          res.status(e.statusCode).json(e.response);
+        } else {
+          res.status(e.statusCode).json({ code: -1, message: "unknown error" });
+        }
       } else {
         res.status(500).json({ code: -1, message: "internal server error" });
       }
@@ -130,39 +157,77 @@ export function checkAuthCode(tokenApi: string): RequestHandler {
   };
 }
 
-export function refreshToken(refreshApi: string): RequestHandler {
-  return async (req, res) => {
-    let refreshToken: string;
+export function autoRefreshToken(refreshApi: string): RequestHandler {
+  const u = url.parse(refreshApi);
 
-    if (!(refreshToken = req.cookies(COOKIE_REFRESH_TOKEN_KEY))) {
-      res.status(403).json({ code: -1, message: "empty refresh token" });
-      return;
-    }
+  return async (req, res, next) => {
+    const now = (Date.now() / 1000) | 0;
+    console.log(refreshApi);
 
-    try {
-      const { access_token, refresh_token } = await http.POST<Tokens>(
-        refreshApi,
-        {
-          refresh_token: refreshToken,
+    let accessToken, atClaims;
+    if (
+      (accessToken = req.cookies[COOKIE_ACCESS_TOKEN_KEY]) &&
+      (atClaims = extractJWTClaims(accessToken))
+    ) {
+      let refreshToken, rtClaims;
+
+      if (
+        atClaims.exp &&
+        atClaims.exp - 60 < now && // access token expired
+        (refreshToken = req.cookies[COOKIE_REFRESH_TOKEN_KEY]) &&
+        (rtClaims = extractJWTClaims(refreshToken)) &&
+        rtClaims.exp &&
+        rtClaims.exp - 60 > now
+      ) {
+        const data = JSON.stringify({ refresh_token: refreshToken });
+
+        try {
+          const { access_token, refresh_token } = await request<Tokens>(
+            {
+              method: "POST",
+              host: u.hostname,
+              path: u.path,
+              port: u.port,
+              timeout: READ_TIMEOUT,
+              headers: {
+                ...req.headers,
+                [HEADER_CONTENT_TYPE]: CONTENT_TYPE_JSON,
+                [HEADER_CONTENT_LENGTH]: data.length,
+              },
+            },
+            data
+          );
+
+          req.cookies[COOKIE_ACCESS_TOKEN_KEY] = access_token;
+          req.cookies[COOKIE_REFRESH_TOKEN_KEY] = refresh_token;
+
+          res
+            .cookie(COOKIE_ACCESS_TOKEN_KEY, access_token, {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === "production",
+            })
+            .cookie(COOKIE_REFRESH_TOKEN_KEY, refresh_token, {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === "production",
+            });
+        } catch (e) {
+          console.log("token refresh failed", e);
+        } finally {
+          next();
         }
-      );
-
-      res
-        .cookie(COOKIE_ACCESS_TOKEN_KEY, access_token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-        })
-        .cookie(COOKIE_REFRESH_TOKEN_KEY, refresh_token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-        })
-        .sendStatus(204);
-    } catch (e) {
-      if (e.code && typeof e.response === "object") {
-        res.status(e.code).json(e.response);
-      } else {
-        res.status(500).json({ code: -1, message: "internal server error" });
+        return;
       }
     }
+
+    next();
+  };
+}
+
+export function revokeTokens(): RequestHandler {
+  return (req, res) => {
+    res
+      .clearCookie(COOKIE_ACCESS_TOKEN_KEY)
+      .clearCookie(COOKIE_REFRESH_TOKEN_KEY)
+      .sendStatus(204);
   };
 }
