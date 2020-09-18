@@ -111,7 +111,7 @@
     "prettier": "^2.1.2",
     "react-refresh": "^0.8.3",
     "react-test-renderer": "^16.13.1",
-    "sass": "^1.26.10",
+    "sass": "^1.26.11",
     "sass-loader": "^10.0.2",
     "source-map-loader": "^1.1.0",
     "start-server-webpack-plugin": "^2.2.5",
