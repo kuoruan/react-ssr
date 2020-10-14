@@ -32,7 +32,7 @@
     "node-fetch": "^2.6.1",
     "portfinder": "^1.0.28",
     "qs": "^6.9.4",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-dom": "^16.13.1",
     "react-helmet": "^6.1.0",
     "react-redux": "^7.2.1",
