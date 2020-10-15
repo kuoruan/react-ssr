@@ -12,7 +12,9 @@ module.exports = {
     float: false,
   },
   future: {
-    removeDeprecatedGapUtilities: true,
+    defaultLineHeights: true,
     purgeLayersByDefault: true,
+    removeDeprecatedGapUtilities: true,
+    standardFontWeights: true,
   },
 };
