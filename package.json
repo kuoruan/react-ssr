@@ -88,7 +88,7 @@
     "dotenv": "^8.2.0",
     "errorhandler": "^1.5.1",
     "eslint": "^7.11.0",
-    "eslint-config-prettier": "^6.12.0",
+    "eslint-config-prettier": "^6.13.0",
     "eslint-config-react": "^1.1.7",
     "eslint-import-resolver-typescript": "^2.3.0",
     "eslint-loader": "^4.0.2",
