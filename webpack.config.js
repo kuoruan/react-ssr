@@ -5,6 +5,7 @@ const {
 
 module.exports = function (env = {}, argv) {
   const { dev = false, server = false, ...restEnv } = env;
+
   if (dev) {
     process.env.NODE_ENV = "development";
   } else {

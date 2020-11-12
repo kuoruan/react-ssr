@@ -19,6 +19,9 @@ module.exports = merge(webpackBase, webpackDev, {
     filename: path.join(assetsDir, "js", "[name].js"),
     chunkFilename: path.join(assetsDir, "js", "[name].chunk.js"),
   },
+  infrastructureLogging: {
+    level: "none",
+  },
   plugins: [
     new ReactRefreshWebpackPlugin({
       overlay: {

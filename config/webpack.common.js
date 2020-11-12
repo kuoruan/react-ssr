@@ -11,8 +11,8 @@ module.exports = {
   resolve: {
     alias: {
       "@": path.join(rootPath, "./src"),
-      "#": rootPath,
     },
+    roots: [rootPath],
     extensions: [".js", ".jsx", ".ts", ".tsx"],
   },
   module: {
@@ -98,6 +98,7 @@ module.exports = {
   },
   plugins: [new Webpack.DefinePlugin(stringified)],
   stats: {
+    assets: false,
     cached: false,
     cachedAssets: false,
     children: false,

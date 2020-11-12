@@ -15,7 +15,7 @@ import {
 } from "./handlers";
 import render from "./render";
 
-const { clientDir, statsFilename } = require("#/config/conf");
+const { clientDir, statsFilename } = require("/config/conf");
 
 const staticBasePath = path.resolve(__dirname, `../${clientDir}`);
 
@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === "development") {
   const devMiddleware = require("webpack-dev-middleware");
   const hotMiddleware = require("webpack-hot-middleware");
 
-  const { getClientWebpackConfig } = require("#/config/utils");
+  const { getClientWebpackConfig } = require("/config/utils");
   const webpackConfig = getClientWebpackConfig(true);
 
   const compiler = webpack(webpackConfig);
@@ -46,7 +46,8 @@ if (process.env.NODE_ENV === "development") {
   app.use(
     devMiddleware(compiler, {
       // silent log, use `friendly-errors-webpack-plugin`
-      logLevel: "silent",
+      serverSideRender: true,
+
       writeToDisk(filePath: string) {
         return filePath.endsWith(statsFilename);
       },

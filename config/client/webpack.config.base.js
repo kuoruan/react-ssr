@@ -83,13 +83,4 @@ module.exports = merge(webpackCommon, {
     new CleanWebpackPlugin(),
     new ForkTsCheckerWebpackPlugin(),
   ],
-  node: {
-    // prevent webpack from injecting mocks to Node native modules
-    // that does not make sense for the client
-    dgram: "empty",
-    fs: "empty",
-    net: "empty",
-    tls: "empty",
-    child_process: "empty",
-  },
 });

@@ -16,7 +16,7 @@ module.exports = {
     ],
   },
   optimization: {
-    noEmitOnErrors: true,
+    emitOnErrors: false,
   },
   plugins: [
     new StylelintPlugin(),
