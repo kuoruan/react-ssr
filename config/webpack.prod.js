@@ -20,7 +20,6 @@ module.exports = {
         },
         extractComments: false,
         parallel: true,
-        cache: true,
       }),
     ],
   },
