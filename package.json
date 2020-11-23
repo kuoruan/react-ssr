@@ -62,7 +62,7 @@
     "@loadable/babel-plugin": "^5.13.2",
     "@loadable/webpack-plugin": "^5.14.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
-    "@svgr/webpack": "^5.4.0",
+    "@svgr/webpack": "^5.5.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/csurf": "^1.11.0",
     "@types/dateformat": "^3.0.1",
