@@ -120,7 +120,7 @@
     "source-map-loader": "^1.1.2",
     "start-server-webpack-plugin": "^2.2.5",
     "style-loader": "^2.0.0",
-    "stylelint": "^13.7.2",
+    "stylelint": "^13.8.0",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-property-sort-order-smacss": "^7.0.0",
     "stylelint-order": "^4.1.0",
