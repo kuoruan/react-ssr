@@ -1,9 +1,8 @@
 import "whatwg-fetch";
-import { loadableReady } from "@loadable/component";
 import { ConnectedRouter } from "connected-react-router";
 import Qs from "qs";
 import React from "react";
-import { hydrate } from "react-dom";
+import ReactDOM from "react-dom";
 import { Provider as ReduxProvider } from "react-redux";
 
 import App from "@/App";
@@ -41,15 +40,13 @@ history.listen((loc) => {
   Promise.allSettled(promises);
 });
 
-loadableReady(() => {
-  hydrate(
-    <ReduxProvider store={store}>
-      <ConnectedRouter history={history}>
-        <App />
-      </ConnectedRouter>
-    </ReduxProvider>,
-    document.getElementById("app")
-  );
-});
+ReactDOM.hydrate(
+  <ReduxProvider store={store}>
+    <ConnectedRouter history={history}>
+      <App />
+    </ConnectedRouter>
+  </ReduxProvider>,
+  document.getElementById("app")
+);
 
 serviceWorker.register();

@@ -1,4 +1,5 @@
-import { ChunkExtractor, ChunkExtractorManager } from "@loadable/server";
+import fs from "fs";
+
 import { RequestHandler } from "express";
 import React from "react";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
@@ -17,6 +18,11 @@ import initStore from "@/store";
 import Html from "./Html";
 import { COOKIE_ACCESS_TOKEN_KEY } from "./types";
 
+type Assets = Record<
+  string,
+  { js?: string[] | string; css?: string[] | string }
+>;
+
 export default function render(statsFile: string): RequestHandler {
   if (module.hot) {
     module.hot.accept(["@/App", "@/routes"], () => {
@@ -24,6 +30,38 @@ export default function render(statsFile: string): RequestHandler {
     });
 
     console.info("✅ Server-side HMR Enabled!");
+  }
+
+  let assets: Assets;
+
+  try {
+    const json = fs.readFileSync(statsFile, "utf-8");
+    assets = JSON.parse(json);
+  } catch (e) {
+    assets = { main: { js: [], css: [] } };
+  }
+
+  const styleNodes: React.ReactNode[] = [];
+  const scriptNodes: React.ReactNode[] = [];
+
+  for (const k in assets) {
+    const { js = [], css = [] } = assets[k];
+
+    if (Array.isArray(js)) {
+      for (const j of js) {
+        scriptNodes.push(<script key={j} src={j} />);
+      }
+    } else {
+      scriptNodes.push(<script key={js} src={js} />);
+    }
+
+    if (Array.isArray(css)) {
+      for (const c of css) {
+        styleNodes.push(<link key={c} rel="preload" href={c} />);
+      }
+    } else {
+      styleNodes.push(<link key={css} rel="preload" href={css} />);
+    }
   }
 
   return async (req, res) => {
@@ -55,32 +93,22 @@ export default function render(statsFile: string): RequestHandler {
 
     await Promise.allSettled(promises);
 
-    const clientExtractor = new ChunkExtractor({
-      statsFile: statsFile,
-    });
-
     const context: StaticContext & {
       url?: string;
     } = {};
 
     const markup = renderToString(
-      <ChunkExtractorManager extractor={clientExtractor}>
-        <ReduxProvider store={store}>
-          <StaticRouter location={url} context={context}>
-            <App />
-          </StaticRouter>
-        </ReduxProvider>
-      </ChunkExtractorManager>
+      <ReduxProvider store={store}>
+        <StaticRouter location={url} context={context}>
+          <App />
+        </StaticRouter>
+      </ReduxProvider>
     );
 
     if (context.statusCode && context.url) {
       res.redirect(context.statusCode, context.url);
       return;
     }
-
-    const linkElements = clientExtractor.getLinkElements();
-    const styleElements = clientExtractor.getStyleElements();
-    const scriptElements = clientExtractor.getScriptElements();
 
     const helmet = Helmet.renderStatic();
     const htmlAttributes = helmet.htmlAttributes.toComponent();
@@ -97,9 +125,9 @@ export default function render(statsFile: string): RequestHandler {
         bodyProps={bodyAttributes}
         titleNode={titleComponent}
         metaNode={metaComponent}
-        linkNodes={[linkComponent, ...linkElements]}
-        styleNodes={styleElements}
-        scriptNodes={scriptElements}
+        linkNodes={[linkComponent]}
+        styleNodes={styleNodes}
+        scriptNodes={scriptNodes}
         content={markup}
         preloadedState={preloadedState}
       />

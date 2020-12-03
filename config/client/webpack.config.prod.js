@@ -6,7 +6,7 @@ const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { merge } = require("webpack-merge");
 const WorkboxPlugin = require("workbox-webpack-plugin");
 
-const { assetsDir, rootPath, statsFilename } = require("../conf");
+const { assetsDir, rootPath } = require("../conf");
 const { raw } = require("../env");
 const webpackProd = require("../webpack.prod");
 const webpackBase = require("./webpack.config.base");
@@ -50,12 +50,11 @@ module.exports = merge(webpackBase, webpackProd, {
     new BundleAnalyzerPlugin({
       analyzerMode: "disabled",
       generateStatsFile: true,
-      statsFilename: "stats.json",
+      statsFilename: "bundle-stats.json",
     }),
     new CompressionPlugin({
       algorithm: "gzip",
       filename: "[path][base].gz[query]",
-      cache: true,
       test: /\.(js|css)$/,
       minRatio: 0.8,
       threshold: 8192,
@@ -63,7 +62,7 @@ module.exports = merge(webpackBase, webpackProd, {
     new WorkboxPlugin.GenerateSW({
       swDest: "sw.js",
       sourcemap: false,
-      exclude: [/\.map$/, /.gz$/, new RegExp(statsFilename), /stats.json$/],
+      exclude: [/\.map$/, /.gz$/, /stats.json$/],
       navigateFallback: `${raw.PUBLIC_URL}/index.html`,
       navigateFallbackDenylist: [
         // Exclude URLs starting with /_, as they're likely an API call

@@ -19,7 +19,7 @@ const { clientDir, statsFilename } = require("/config/conf");
 
 const staticBasePath = path.resolve(__dirname, `../${clientDir}`);
 
-const clientStats = path.resolve(__dirname, `../${clientDir}/${statsFilename}`);
+const clientStats = path.resolve(__dirname, `../${clientDir}/assets.json`);
 
 const app = express();
 

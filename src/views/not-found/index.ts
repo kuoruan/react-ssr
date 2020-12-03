@@ -1,7 +1,3 @@
-import loadable from "@loadable/component";
-
-const NotFound = loadable(
-  () => import(/* webpackChunkName: "views" */ "./NotFound")
-);
+import NotFound from "./NotFound";
 
 export default NotFound;

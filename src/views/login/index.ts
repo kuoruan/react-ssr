@@ -1,5 +1,3 @@
-import loadable from "@loadable/component";
-
-const Login = loadable(() => import(/* webpackChunkName: "views" */ "./Login"));
+import Login from "./Login";
 
 export default Login;

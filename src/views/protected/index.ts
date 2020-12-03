@@ -1,7 +1,3 @@
-import loadable from "@loadable/component";
-
-const Protected = loadable(
-  () => import(/* webpackChunkName: "views" */ "./Protected")
-);
+import Protected from "./Protected";
 
 export default Protected;

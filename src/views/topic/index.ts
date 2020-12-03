@@ -1,10 +1,6 @@
-import loadable from "@loadable/component";
-
 import { RouteConfigProperties } from "@/routes/types";
 
-const component = loadable(
-  () => import(/* webpackChunkName: "views" */ "./Topic")
-);
+import component from "./Topic";
 
 const Topic: typeof component & RouteConfigProperties = component;
 

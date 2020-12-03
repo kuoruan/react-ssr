@@ -8,7 +8,6 @@ const defaultConfig = {
   assetsDir: "static",
   publicPath: "/",
   sassAdditionalData: "",
-  statsFilename: "loadable-stats.json",
 };
 
 module.exports = Object.assign({}, defaultConfig, appConfig);

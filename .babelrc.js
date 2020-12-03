@@ -35,7 +35,6 @@ module.exports = (api) => {
     ],
     plugins: [
       isDevelopment && isWeb && "react-refresh/babel",
-      "@loadable/babel-plugin",
       "@babel/plugin-proposal-class-properties",
       "@babel/plugin-proposal-object-rest-spread",
       "@babel/plugin-proposal-optional-chaining",

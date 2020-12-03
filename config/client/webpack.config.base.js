@@ -1,6 +1,6 @@
 const path = require("path");
 
-const LoadablePlugin = require("@loadable/webpack-plugin");
+const AssetsPlugin = require("assets-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
@@ -14,7 +14,6 @@ const {
   publicPath,
   rootPath,
   sassAdditionalData,
-  statsFilename,
 } = require("../conf");
 const { raw } = require("../env");
 const webpackCommon = require("../webpack.common");
@@ -66,11 +65,11 @@ module.exports = merge(webpackCommon, {
     ],
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new Webpack.DefinePlugin({
       __isClient__: "true",
       __isServer__: "false",
     }),
-    new LoadablePlugin({ filename: statsFilename }),
     new CopyPlugin({
       patterns: [
         {
@@ -80,7 +79,12 @@ module.exports = merge(webpackCommon, {
         },
       ],
     }),
-    new CleanWebpackPlugin(),
     new ForkTsCheckerWebpackPlugin(),
+    new AssetsPlugin({
+      filename: "assets.json",
+      includeAllFileTypes: false,
+      entrypoints: true,
+      useCompilerPath: true,
+    }),
   ],
 });

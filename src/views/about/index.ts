@@ -1,11 +1,7 @@
-import loadable from "@loadable/component";
-
 import { RouteConfigProperties } from "@/routes/types";
 import { fetchUserInfo } from "@/store/system/thunks";
 
-const component = loadable(
-  () => import(/* webpackChunkName: "views" */ "./About")
-);
+import component from "./About";
 
 const About: typeof component & RouteConfigProperties = component;
 
