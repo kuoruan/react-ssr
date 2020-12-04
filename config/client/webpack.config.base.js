@@ -14,6 +14,7 @@ const {
   publicPath,
   rootPath,
   sassAdditionalData,
+  assetsFilename,
 } = require("../conf");
 const { raw } = require("../env");
 const webpackCommon = require("../webpack.common");
@@ -81,7 +82,7 @@ module.exports = merge(webpackCommon, {
     }),
     new ForkTsCheckerWebpackPlugin(),
     new AssetsPlugin({
-      filename: "assets.json",
+      filename: assetsFilename,
       includeAllFileTypes: false,
       entrypoints: true,
       useCompilerPath: true,

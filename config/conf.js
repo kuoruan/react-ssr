@@ -8,6 +8,7 @@ const defaultConfig = {
   assetsDir: "static",
   publicPath: "/",
   sassAdditionalData: "",
+  assetsFilename: "assets.json",
 };
 
 module.exports = Object.assign({}, defaultConfig, appConfig);

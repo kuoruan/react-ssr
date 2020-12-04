@@ -14,12 +14,16 @@ import {
   csrfErrorHandler,
 } from "./handlers";
 import render from "./render";
+import assetsParser from "./middleware/assetsParser";
 
-const { clientDir, statsFilename } = require("/config/conf");
+const { clientDir, assetsFilename } = require("/config/conf");
 
 const staticBasePath = path.resolve(__dirname, `../${clientDir}`);
 
-const clientStats = path.resolve(__dirname, `../${clientDir}/assets.json`);
+const clientAssets = path.resolve(
+  __dirname,
+  `../${clientDir}/${assetsFilename}`
+);
 
 const app = express();
 
@@ -49,7 +53,7 @@ if (process.env.NODE_ENV === "development") {
       serverSideRender: true,
 
       writeToDisk(filePath: string) {
-        return filePath.endsWith(statsFilename);
+        return filePath.endsWith(assetsFilename);
       },
     })
   );
@@ -60,6 +64,7 @@ if (process.env.NODE_ENV === "development") {
   );
 }
 
+app.use(assetsParser(clientAssets));
 app.use(cookieParser());
 
 app.use(csrfProtection());
@@ -94,6 +99,6 @@ app.use(
 );
 
 // server side render
-app.get("*", render(clientStats));
+app.get("*", render());
 
 export default app;

@@ -1,5 +1,3 @@
-import fs from "fs";
-
 import { RequestHandler } from "express";
 import React from "react";
 import { renderToString, renderToStaticMarkup } from "react-dom/server";
@@ -18,50 +16,13 @@ import initStore from "@/store";
 import Html from "./Html";
 import { COOKIE_ACCESS_TOKEN_KEY } from "./types";
 
-type Assets = Record<
-  string,
-  { js?: string[] | string; css?: string[] | string }
->;
-
-export default function render(statsFile: string): RequestHandler {
+export default function render(): RequestHandler {
   if (module.hot) {
     module.hot.accept(["@/App", "@/routes"], () => {
       console.log("🔁 Server-side HMR Reloading...");
     });
 
     console.info("✅ Server-side HMR Enabled!");
-  }
-
-  let assets: Assets;
-
-  try {
-    const json = fs.readFileSync(statsFile, "utf-8");
-    assets = JSON.parse(json);
-  } catch (e) {
-    assets = { main: { js: [], css: [] } };
-  }
-
-  const styleNodes: React.ReactNode[] = [];
-  const scriptNodes: React.ReactNode[] = [];
-
-  for (const k in assets) {
-    const { js = [], css = [] } = assets[k];
-
-    if (Array.isArray(js)) {
-      for (const j of js) {
-        scriptNodes.push(<script key={j} async={true} src={j} />);
-      }
-    } else {
-      scriptNodes.push(<script key={js} async={true} src={js} />);
-    }
-
-    if (Array.isArray(css)) {
-      for (const c of css) {
-        styleNodes.push(<link key={c} rel="stylesheet" href={c} />);
-      }
-    } else {
-      styleNodes.push(<link key={css} rel="stylesheet" href={css} />);
-    }
   }
 
   return async (req, res) => {
@@ -108,6 +69,27 @@ export default function render(statsFile: string): RequestHandler {
     if (context.statusCode && context.url) {
       res.redirect(context.statusCode, context.url);
       return;
+    }
+
+    const styleNodes: React.ReactNode[] = [];
+    const scriptNodes: React.ReactNode[] = [];
+
+    const { js = [], css = [] } = req.assets;
+
+    if (Array.isArray(js)) {
+      for (const j of js) {
+        scriptNodes.push(<script key={j} src={j} />);
+      }
+    } else if (js) {
+      scriptNodes.push(<script key={js} src={js} />);
+    }
+
+    if (Array.isArray(css)) {
+      for (const c of css) {
+        styleNodes.push(<link key={c} rel="stylesheet" href={c} />);
+      }
+    } else if (css) {
+      styleNodes.push(<link key={css} rel="stylesheet" href={css} />);
     }
 
     const helmet = Helmet.renderStatic();
