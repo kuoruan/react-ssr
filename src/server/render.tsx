@@ -49,18 +49,18 @@ export default function render(statsFile: string): RequestHandler {
 
     if (Array.isArray(js)) {
       for (const j of js) {
-        scriptNodes.push(<script key={j} src={j} />);
+        scriptNodes.push(<script key={j} async={true} src={j} />);
       }
     } else {
-      scriptNodes.push(<script key={js} src={js} />);
+      scriptNodes.push(<script key={js} async={true} src={js} />);
     }
 
     if (Array.isArray(css)) {
       for (const c of css) {
-        styleNodes.push(<link key={c} rel="preload" href={c} />);
+        styleNodes.push(<link key={c} rel="stylesheet" href={c} />);
       }
     } else {
-      styleNodes.push(<link key={css} rel="preload" href={css} />);
+      styleNodes.push(<link key={css} rel="stylesheet" href={css} />);
     }
   }
 
