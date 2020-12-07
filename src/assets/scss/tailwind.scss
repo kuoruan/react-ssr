@@ -9,8 +9,8 @@ body {
   @apply bg-white font-sans antialiased;
 }
 *,
-*:before,
-*:after {
+*::before,
+*::after {
   box-sizing: inherit;
 }
 svg {
