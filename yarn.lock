@@ -7912,10 +7912,10 @@ raw-body@2.4.0:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
-razzle-start-server-webpack-plugin@^4.0.0-canary.3:
-  version "4.0.0-canary.3"
-  resolved "https://registry.yarnpkg.com/razzle-start-server-webpack-plugin/-/razzle-start-server-webpack-plugin-4.0.0-canary.3.tgz#81c3ad0860782bd7f1a2f9d27f231c6f10df0273"
-  integrity sha512-OgxLT9rXzWqZsWOJ/6lbDQHbOS+ZTARGxG1imvBx0KmXMWn8sMko+JsAPB8z2QQKOjdw3oZ6fDGVJeBIoTfaow==
+razzle-start-server-webpack-plugin@^4.0.0-canary.9:
+  version "4.0.0-canary.9"
+  resolved "https://registry.yarnpkg.com/razzle-start-server-webpack-plugin/-/razzle-start-server-webpack-plugin-4.0.0-canary.9.tgz#af8b2fafef3630a0cbca90fad237f85587f5ac40"
+  integrity sha512-oGVrxQ7DZ0w3iHHth5RSt5xAv6yQ64pAhL0QlOja2s10XJER2mXi9eUYOOUMkcYTEjTd1kfM17lROb857NvQ9w==
 
 react-dom@^17.0.1:
   version "17.0.1"
