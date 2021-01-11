@@ -112,7 +112,7 @@
     "razzle-start-server-webpack-plugin": "^4.0.0-canary.9",
     "react-refresh": "^0.9.0",
     "react-test-renderer": "^17.0.1",
-    "sass": "^1.32.0",
+    "sass": "^1.32.2",
     "sass-loader": "^10.1.0",
     "source-map-loader": "^2.0.0",
     "start-server-webpack-plugin": "^2.2.5",
