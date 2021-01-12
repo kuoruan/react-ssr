@@ -1,7 +1,6 @@
 const path = require("path");
 
-// const StartServerPlugin = require("start-server-webpack-plugin");
-const StartServerPlugin = require("razzle-start-server-webpack-plugin");
+const { RunScriptWebpackPlugin } = require("run-script-webpack-plugin");
 const { merge } = require("webpack-merge");
 const NodeExternals = require("webpack-node-externals");
 
@@ -29,10 +28,9 @@ module.exports = merge(webpackBase, webpackDev, {
     }),
   ],
   plugins: [
-    new StartServerPlugin({
-      entryName: "server",
-      restartable: true,
-      verbose: false,
+    new RunScriptWebpackPlugin({
+      name: "server.js",
+      signal: true,
     }),
   ],
 });
