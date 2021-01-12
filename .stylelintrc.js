@@ -12,5 +12,12 @@ module.exports = {
         ignoreAtRules: ["extend", "tailwind", "screen"],
       },
     ],
+    "rule-empty-line-before": [
+      "always",
+      {
+        except: ["first-nested"],
+        ignore: ["after-comment"],
+      },
+    ],
   },
 };
