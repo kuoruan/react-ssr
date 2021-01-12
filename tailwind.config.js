@@ -1,20 +1,11 @@
 module.exports = {
-  purge: {
-    enabled: true,
-    content: ["./src/**/*.tsx"],
+  purge: ["./src/**/*.tsx"],
+  darkMode: false,
+  theme: {
+    extend: {},
   },
-  theme: {},
   variants: {
-    appearance: [],
+    extend: {},
   },
   plugins: [],
-  corePlugins: {
-    float: false,
-  },
-  future: {
-    defaultLineHeights: true,
-    purgeLayersByDefault: true,
-    removeDeprecatedGapUtilities: true,
-    standardFontWeights: true,
-  },
 };
