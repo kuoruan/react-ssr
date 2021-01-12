@@ -10,7 +10,7 @@ import {
 export function request<T = any>(
   url = "",
   options?: RequestInit | string,
-  body?: object
+  body?: Record<string, unknown>
 ): Promise<T> {
   if (typeof options === "undefined") {
     options = {
@@ -108,7 +108,7 @@ export function GET<T = any>(
 
 export function POST<T = any>(
   url: string,
-  data: object,
+  data: Record<string, unknown>,
   options: RequestInit = {}
 ): Promise<T> {
   return request<T>(url, Object.assign({}, options, { method: "POST" }), data);
@@ -116,7 +116,7 @@ export function POST<T = any>(
 
 export function PUT<T = any>(
   url: string,
-  data: object,
+  data: Record<string, unknown>,
   options: RequestInit = {}
 ): Promise<T> {
   return request<T>(url, Object.assign({}, options, { method: "PUT" }), data);
@@ -124,7 +124,7 @@ export function PUT<T = any>(
 
 export function PATCH<T = any>(
   url: string,
-  data: object,
+  data: Record<string, unknown>,
   options: RequestInit = {}
 ): Promise<T> {
   return request<T>(url, Object.assign({}, options, { method: "PATCH" }), data);
@@ -132,7 +132,7 @@ export function PATCH<T = any>(
 
 export function DELETE<T = any>(
   url: string,
-  data: object,
+  data: Record<string, unknown>,
   options: RequestInit = {}
 ): Promise<T> {
   return request<T>(

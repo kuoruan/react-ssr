@@ -5,9 +5,9 @@ import { Helmet } from "react-helmet";
 import RoutesSwitch from "@/components/RoutesSwitch";
 import routes from "@/routes";
 
-interface AppProps extends HTMLProps<HTMLDivElement> {}
+type AppProps = HTMLProps<HTMLDivElement>;
 
-const App: FC<AppProps> = function (props: AppProps) {
+const App: FC<AppProps> = function () {
   return (
     <>
       <Helmet>

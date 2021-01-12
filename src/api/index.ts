@@ -41,7 +41,7 @@ export default class Api {
 
   public POST<T = any>(
     path: string,
-    data: object,
+    data: Record<string, unknown>,
     options: RequestInit = {}
   ): Promise<T> {
     const headers = Object.assign({}, this.baseHeaders, options.headers);
@@ -55,7 +55,7 @@ export default class Api {
 
   public PATCH<T = any>(
     path: string,
-    data: object,
+    data: Record<string, unknown>,
     options: RequestInit = {}
   ): Promise<T> {
     const headers = Object.assign({}, this.baseHeaders, options.headers);
@@ -69,7 +69,7 @@ export default class Api {
 
   public PUT<T = any>(
     path: string,
-    data: object,
+    data: Record<string, unknown>,
     options: RequestInit = {}
   ): Promise<T> {
     const headers = Object.assign({}, this.baseHeaders, options.headers);
@@ -83,7 +83,7 @@ export default class Api {
 
   public DELETE<T = any>(
     path: string,
-    data: object,
+    data: Record<string, unknown>,
     options: RequestInit = {}
   ): Promise<T> {
     const headers = Object.assign({}, this.baseHeaders, options.headers);
@@ -98,7 +98,7 @@ export default class Api {
   private async checkAndRequest<T>(
     path = "",
     options?: RequestInit | string,
-    body?: object
+    body?: Record<string, unknown>
   ): Promise<T> {
     if (this.requestWait) {
       try {

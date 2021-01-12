@@ -12,7 +12,7 @@ type SWConfig = {
   onUpdate?: (registration: ServiceWorkerRegistration) => void;
 };
 
-export function register(config?: SWConfig) {
+export function register(config?: SWConfig): void {
   if (
     process.env.NODE_ENV !== "production" ||
     !("serviceWorker" in navigator)
@@ -23,7 +23,7 @@ export function register(config?: SWConfig) {
   const { href, hostname, origin } = window.location;
 
   // The URL constructor is available in all browsers that support SW.
-  const publicUrl = new URL(process.env.PUBLIC_URL!, href);
+  const publicUrl = new URL(process.env.PUBLIC_URL || "", href);
   if (publicUrl.origin !== origin) {
     // Our service worker won't work if PUBLIC_URL is on a different origin
     // from what our page is served on. This might happen if a CDN is used to
@@ -128,7 +128,7 @@ function checkValidServiceWorker(swUrl: string, config?: SWConfig) {
     });
 }
 
-export function unregister() {
+export function unregister(): void {
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.ready.then((registration) => {
       registration.unregister();

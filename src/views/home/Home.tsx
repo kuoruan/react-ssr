@@ -6,7 +6,7 @@ import { Link, useRouteMatch } from "react-router-dom";
 
 type HomeProps = HTMLProps<HTMLDivElement>;
 
-const Home: FC<HomeProps> = function (props: HomeProps) {
+const Home: FC<HomeProps> = function () {
   const [inp, setInp] = useState<string>("");
   const { url } = useRouteMatch();
 
@@ -15,7 +15,7 @@ const Home: FC<HomeProps> = function (props: HomeProps) {
       <Helmet>
         <title>Home page.</title>
       </Helmet>
-      <div className="main" {...props}>
+      <div className="main">
         <p className="hello">Hello World.</p>
         <input
           type="text"

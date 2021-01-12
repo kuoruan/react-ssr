@@ -41,12 +41,12 @@ export default class HttpError extends CustomError {
   public constructor(
     public code: number,
     message = HttpError.messages[code],
-    response?: string | object
+    public response?: string | Record<string, unknown>
   ) {
     super(message);
   }
 
-  public getCodeMessage() {
+  public getCodeMessage(): string {
     return HttpError.messages[this.code];
   }
 }

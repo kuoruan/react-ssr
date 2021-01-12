@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 
 type TopicProps = HTMLProps<HTMLDivElement>;
 
-const Topic: FC<TopicProps> = function (props: TopicProps) {
+const Topic: FC<TopicProps> = function () {
   const { topicId } = useParams<{ topicId: string }>();
-  return <div {...props}>{topicId}</div>;
+  return <div>{topicId}</div>;
 };
 
 export default Topic;
