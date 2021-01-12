@@ -1,7 +1,7 @@
 import { RootState } from "../types";
 
-export const getUsername = (state: RootState) => state.system.userName;
+export const getUsername = (state: RootState): string => state.system.userName;
 
-export const isLoggedIn = (state: RootState) => state.system.loggedIn;
+export const isLoggedIn = (state: RootState): boolean => state.system.loggedIn;
 
-export const getCSRFToken = (state: RootState) => state.system.csrf;
+export const getCSRFToken = (state: RootState): string => state.system.csrf;

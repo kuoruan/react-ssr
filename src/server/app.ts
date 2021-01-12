@@ -95,7 +95,11 @@ app.use(
 // add a filter proxy to all api
 app.use(
   "/api",
-  proxyApi(process.env.APP_API_HOST!, "/api", process.env.APP_API_BASE_PATH!)
+  proxyApi(
+    process.env.APP_API_HOST || "",
+    "/api",
+    process.env.APP_API_BASE_PATH || ""
+  )
 );
 
 // server side render

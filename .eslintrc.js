@@ -5,21 +5,16 @@ module.exports = {
     node: true,
   },
   parser: "@typescript-eslint/parser",
-  plugins: ["prettier", "@typescript-eslint", "react", "react-hooks", "import"],
+  plugins: ["prettier", "import"],
   extends: [
+    "eslint:recommended",
     "plugin:prettier/recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
-    "plugin:import/typescript",
   ],
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: "module",
-    ecmaFeatures: {
-      jsx: true,
-    },
   },
   rules: {
     "import/order": [
@@ -46,10 +41,49 @@ module.exports = {
       },
     ],
   },
-  settings: {
-    react: {
-      version: "detect",
+  overrides: [
+    {
+      files: ["*.ts", "*.tsx"],
+      env: {
+        es6: true,
+        node: true,
+        browser: true,
+      },
+      parser: "@typescript-eslint/parser",
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      plugins: [
+        "prettier",
+        "@typescript-eslint",
+        "react",
+        "react-hooks",
+        "import",
+      ],
+      extends: [
+        "eslint:recommended",
+        "plugin:prettier/recommended",
+        "plugin:react/recommended",
+        "plugin:react-hooks/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript",
+      ],
+      rules: {
+        "@typescript-eslint/no-var-requires": ["off"],
+        "@typescript-eslint/no-explicit-any": ["off"],
+      },
+      settings: {
+        react: {
+          version: "detect",
+        },
+        "import/resolver": ["node", "typescript"],
+      },
     },
-    "import/resolver": ["node", "typescript"],
-  },
+  ],
 };

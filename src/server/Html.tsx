@@ -8,7 +8,7 @@ interface HtmlProps extends HTMLProps<HTMLHtmlElement> {
   styleNodes?: ReactNode[];
   scriptNodes?: ReactNode[];
   content?: string;
-  preloadedState?: object;
+  preloadedState?: any;
 }
 
 const Html: FC<HtmlProps> = function ({

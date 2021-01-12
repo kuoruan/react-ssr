@@ -4,9 +4,9 @@ import { useLocation } from "react-router-dom";
 
 import { fetchUserInfo } from "@/store/system/thunks";
 
-interface LoginProps extends HTMLProps<HTMLDivElement> {}
+type LoginProps = HTMLProps<HTMLDivElement>;
 
-const Login: FC<LoginProps> = function (props: LoginProps) {
+const Login: FC<LoginProps> = function () {
   const location = useLocation<{ from: Location }>();
 
   const dispath = useDispatch();

@@ -1,13 +1,13 @@
 import http, { RequestOptions } from "http";
 
-import Minimist from "minimist";
+import Minimist, { ParsedArgs } from "minimist";
 import PortFinder from "portfinder";
 
 import { UserClaims } from "./types";
 
-export function parseArgs(initValue?: {
-  [key: string]: number | boolean | string;
-}) {
+export function parseArgs(
+  initValue?: Record<string, number | boolean | string>
+): ParsedArgs {
   return Minimist(process.argv.slice(2), { default: initValue });
 }
 

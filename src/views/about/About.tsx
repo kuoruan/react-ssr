@@ -11,7 +11,7 @@ interface AboutProps
     RouteConfigComponentProps {}
 
 const About: FC<AboutProps> = function ({ route }: AboutProps) {
-  let { url } = useRouteMatch();
+  const { url } = useRouteMatch();
 
   const userName = useSelector(getUsername);
 

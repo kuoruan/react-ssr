@@ -1,13 +1,13 @@
-import React, { FC } from "react";
+import React, { FC, HTMLProps } from "react";
 
 import Status from "@/components/Status";
 
-interface NotFoundProps {}
+type NotFoundProps = HTMLProps<HTMLDivElement>;
 
 const NotFound: FC<NotFoundProps> = function (props: NotFoundProps) {
   return (
     <Status statusCode={404}>
-      <div>
+      <div {...props}>
         <h1>Page not found.</h1>
       </div>
     </Status>

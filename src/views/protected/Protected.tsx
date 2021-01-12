@@ -1,9 +1,9 @@
 import React, { FC, HTMLProps } from "react";
 
-interface ProtectedProps extends HTMLProps<HTMLDivElement> {}
+type ProtectedProps = HTMLProps<HTMLDivElement>;
 
 const Protected: FC<ProtectedProps> = function (props: ProtectedProps) {
-  return <div>This is a Protected page.</div>;
+  return <div {...props}>This is a Protected page.</div>;
 };
 
 export default Protected;

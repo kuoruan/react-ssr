@@ -87,7 +87,7 @@ export function proxyApi(
     onError: (err, req, res) => {
       res.status(500).json({ code: -1, message: "internal server error" });
     },
-    onProxyReq: (proxyReq, req, res) => {
+    onProxyReq: (proxyReq, req) => {
       let token, requestId: string;
       // get the access token from cookie and add it to the request header
       if ((token = req.cookies[COOKIE_ACCESS_TOKEN_KEY])) {

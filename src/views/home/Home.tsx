@@ -4,7 +4,7 @@ import React, { FC, HTMLProps, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useRouteMatch } from "react-router-dom";
 
-interface HomeProps extends HTMLProps<HTMLDivElement> {}
+type HomeProps = HTMLProps<HTMLDivElement>;
 
 const Home: FC<HomeProps> = function (props: HomeProps) {
   const [inp, setInp] = useState<string>("");
@@ -15,7 +15,7 @@ const Home: FC<HomeProps> = function (props: HomeProps) {
       <Helmet>
         <title>Home page.</title>
       </Helmet>
-      <div className="main">
+      <div className="main" {...props}>
         <p className="hello">Hello World.</p>
         <input
           type="text"
