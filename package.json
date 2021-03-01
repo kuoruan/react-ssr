@@ -23,7 +23,7 @@
     "@babel/runtime": "^7.12.18",
     "connected-react-router": "^6.8.0",
     "cookie-parser": "^1.4.5",
-    "core-js": "^3.9.0",
+    "core-js": "^3.9.1",
     "csurf": "^1.11.0",
     "dateformat": "^4.5.1",
     "express": "^4.17.1",
