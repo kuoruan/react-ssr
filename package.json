@@ -20,7 +20,7 @@
     "lint:style": "stylelint '**/*.{scss,less,css}' --quiet --fix"
   },
   "dependencies": {
-    "@babel/runtime": "^7.13.8",
+    "@babel/runtime": "^7.13.9",
     "connected-react-router": "^6.9.1",
     "cookie-parser": "^1.4.5",
     "core-js": "^3.9.1",
