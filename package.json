@@ -109,7 +109,7 @@
     "prettier": "^2.2.1",
     "react-refresh": "^0.9.0",
     "react-test-renderer": "^17.0.1",
-    "run-script-webpack-plugin": "^0.0.8",
+    "run-script-webpack-plugin": "^0.0.10",
     "sass": "^1.32.8",
     "sass-loader": "^11.0.1",
     "source-map-loader": "^2.0.1",

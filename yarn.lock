@@ -8118,10 +8118,10 @@ run-parallel@^1.1.9:
   resolved "https://registry.yarnpkg.com/run-parallel/-/run-parallel-1.1.9.tgz#c9dd3a7cf9f4b2c4b6244e173a6ed866e61dd679"
   integrity sha512-DEqnSRTDw/Tc3FXf49zedI638Z9onwUotBMiUFKmrO2sdFKIbXamXGQ3Axd4qgphxKB4kw/qP1w5kTxnfU1B9Q==
 
-run-script-webpack-plugin@^0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/run-script-webpack-plugin/-/run-script-webpack-plugin-0.0.8.tgz#63b695e8ed4d5f7bd61fa3508e50c0135338a130"
-  integrity sha512-dzTVaDKWf4XJNlvTrQD2haT7a0zsp+RcCs9jsYiiqGRkBrtwds39mN7A0aSeilfEtt3t8DxtoUXyh76x1mq3MQ==
+run-script-webpack-plugin@^0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/run-script-webpack-plugin/-/run-script-webpack-plugin-0.0.10.tgz#1d1b386a68746468b8a72ff14dcac7ecb2512a5f"
+  integrity sha512-kzRz0lWhA45zEJQxOWl30bjmHB4Mzq22f/XJGY/ICuiVnhvOyR6nr+epgDb8s4Lm87mgR0N9ScTT0M6OPboOCQ==
 
 rxjs@^6.6.3:
   version "6.6.3"
