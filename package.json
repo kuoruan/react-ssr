@@ -81,7 +81,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "compression-webpack-plugin": "^7.1.2",
     "copy-webpack-plugin": "^8.0.0",
-    "css-loader": "^5.1.0",
+    "css-loader": "^5.1.2",
     "cssnano": "^4.1.10",
     "dotenv": "^8.2.0",
     "errorhandler": "^1.5.1",
