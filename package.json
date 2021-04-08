@@ -28,7 +28,7 @@
     "dateformat": "^4.5.1",
     "express": "^4.17.1",
     "history": "4.10.1",
-    "http-proxy-middleware": "^1.0.6",
+    "http-proxy-middleware": "^1.1.0",
     "minimist": "^1.2.5",
     "node-fetch": "^2.6.1",
     "portfinder": "^1.0.28",
