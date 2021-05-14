@@ -25,4 +25,4 @@ jobs:
               pull_number: context.issue.number,
               merge_method: 'squash'
             })
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{secrets.PAT}}
