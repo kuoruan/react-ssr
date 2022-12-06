@@ -32,7 +32,7 @@
     "minimist": "^1.2.6",
     "node-fetch": "^3.2.10",
     "portfinder": "^1.0.28",
-    "qs": "^6.10.1",
+    "qs": "^6.10.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-helmet": "^6.1.0",
